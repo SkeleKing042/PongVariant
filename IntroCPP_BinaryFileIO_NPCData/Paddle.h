@@ -11,10 +11,16 @@ public:
 	double angle;
 	double speed = 1.0;
 	pair<double, double> size;
+	Rectangle rec;
+	Vector2 recCenter;
+private:
+	double distanceFromCenter;
 
 public:
-	Paddle(double givenSpeed, double givenWidth, double givenHeight);
+	Paddle(double speed, double width, double height, double radius);
 	~Paddle();
 
 	void MovePaddle(int inputDir);
+
+	double GetPaddleNormal();
 };

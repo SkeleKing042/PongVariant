@@ -29,17 +29,17 @@ int main(int argc, char* argv[])
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    int screenWidth = 800;
-    int screenHeight = 450;
+    int screenWidth = 300;
+    int screenHeight = screenWidth;
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
-    Paddle playerPaddle(0.1, 10, 50);
-    int PaddleRadius = 200;
+    double PaddleRadius = screenWidth / 2 - 10;
+    Paddle playerPaddle(0.1, 10, 50, PaddleRadius);
     vector<double> momentum;
     momentum.push_back(0.5);
     momentum.push_back(0.5);
-    Ball gameBall(10, 5, momentum);   
+    Ball gameBall(10, 5, rand() % 360);
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
@@ -58,23 +58,36 @@ int main(int argc, char* argv[])
 
         ClearBackground(BLACK);
 
-        //cout << "ANGLE: " << playerPaddle.angle << endl;
-        Rectangle rec;
-        Vector2 recPos;
-        rec.x = screenWidth / 2 + cos(playerPaddle.angle) * PaddleRadius;
-        rec.y = screenHeight / 2 + sin(playerPaddle.angle) * PaddleRadius;
-        rec.width = playerPaddle.size.first;
-        rec.height = playerPaddle.size.second;
-        recPos.x = playerPaddle.size.first / 2;
-        recPos.y = playerPaddle.size.second / 2;
-        DrawRectanglePro(rec, recPos, RAD2DEG * playerPaddle.angle, GREEN);
-        /*DrawLine(playerPaddle.corners[0].first + screenWidth / 2 + cos(playerPaddle.angle) * PaddleRadius,
-            playerPaddle.corners[0].second + screenHeight / 2 + sin(playerPaddle.angle) * PaddleRadius,
-            playerPaddle.corners[1].first + screenWidth / 2 + cos(playerPaddle.angle) * PaddleRadius,
-            playerPaddle.corners[1].second + screenHeight / 2 + sin(playerPaddle.angle) * PaddleRadius, RED);
-        //DrawCircle(, 1, RED);
-        DrawRectangleLines(screenWidth / 2 + cos(playerPaddle.angle) * PaddleRadius, screenHeight / 2 + sin(playerPaddle.angle) * PaddleRadius, 10, 50, WHITE);*/
-        DrawCircle(gameBall.position[0], gameBall.position[1], gameBall.size, BLUE);
+        DrawRectanglePro(playerPaddle.rec, playerPaddle.recCenter, RAD2DEG * playerPaddle.angle, GREEN);
+        Vector2 ballPos;
+        ballPos.x = gameBall.position.x;
+        ballPos.y = gameBall.position.y;
+        Rectangle rec = playerPaddle.rec;
+        rec.x = playerPaddle.rec.x - playerPaddle.rec.width / 2;
+        rec.y = playerPaddle.rec.y - playerPaddle.rec.height / 2;
+        if (CheckCollisionCircleRec(ballPos, gameBall.size, rec))
+        {
+
+            // https://answers.unity.com/questions/880103/vector-based-pong-ball-bounce-calculations.html
+            Vector2 ballVelocity = gameBall.velocity;
+            ballVelocity = NormaliseVector(ballVelocity);
+            Vector2 playerNormalAsVector;
+            playerNormalAsVector.x = cos(playerPaddle.GetPaddleNormal());
+            playerNormalAsVector.y = sin(playerPaddle.GetPaddleNormal());
+            double dotProd = DotVectors(gameBall.velocity, playerNormalAsVector);
+
+            //double tmpAngle = gameBall.moveDir;
+            //tmpAngle = tmpAngle * RAD2DEG;
+            //tmpAngle = tmpAngle - 180;
+            //if (tmpAngle < 0) tmpAngle += 360;
+            //double angleDiff = abs(tmpAngle - playerPaddle.angle);
+            //tmpAngle = tmpAngle + angleDiff * 2;
+            //gameBall.UpdateMoveDir(tmpAngle);
+
+
+            DrawRectangle(rec.x, rec.y, rec.width, rec.height, RED);
+        }
+        DrawCircle(gameBall.position.x, gameBall.position.y, gameBall.size, BLUE);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -86,4 +99,20 @@ int main(int argc, char* argv[])
     //--------------------------------------------------------------------------------------
 
     return 0;
+}
+
+double DotVectors(Vector2 lhs, Vector2 rhs)
+{
+    return lhs.x * rhs.x + lhs.y * rhs.y;
+}
+Vector2 NormaliseVector(Vector2 v)
+{
+    Vector2 v2;
+    v2.x = v.x / Magnitude(v);
+    v2.y = v.y / Magnitude(v);
+    return v2;
+}
+double Magnitude(Vector2 v)
+{
+    return sqrt(v.x * v.x + v.y * v.y);
 }

@@ -8,14 +8,17 @@ using namespace std;
 class Ball
 {
 public:
-	vector<double> position;
-	vector<double> momentum;
+	Vector2 position;
+	Vector2 velocity;
+	double moveDir;
 	double speed;
 	double size;
 
 public:
-	Ball(double givenSpeed, double givenSize, vector<double> givenMomentum);
+	Ball(double givenSpeed, double givenSize, double givenDir);
 	~Ball();
 
 	void MoveBall();
+	void UpdateMoveDir(double newAngle);
+	double GetMovementDir();
 };
