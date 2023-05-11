@@ -35,13 +35,12 @@ int main(int argc, char* argv[])
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
     double PaddleRadius = screenWidth / 2 - 10;
-    Paddle playerPaddle(0.1, 10, 50, PaddleRadius);
-    vector<double> momentum;
-    momentum.push_back(0.5);
-    momentum.push_back(0.5);
-    Ball gameBall(10, 5, rand() % 360);
+    double random = rand() % 1;
+    Paddle playerPaddle(0.05, 10, 50, PaddleRadius, random);
+    Ball gameBall(2, 5, random);
 
     SetTargetFPS(60);
+    int deltaFrames = 0;
     //--------------------------------------------------------------------------------------
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -65,27 +64,31 @@ int main(int argc, char* argv[])
         Rectangle rec = playerPaddle.rec;
         rec.x = playerPaddle.rec.x - playerPaddle.rec.width / 2;
         rec.y = playerPaddle.rec.y - playerPaddle.rec.height / 2;
-        if (CheckCollisionCircleRec(ballPos, gameBall.size, rec))
+        if (gameBall.collidable)
         {
+            if (CheckCollisionCircleRec(ballPos, gameBall.size, rec))
+            {
+                gameBall.collidable = false;
+                gameBall.speed += 0.05;
+                double ballDir = gameBall.moveDir;
+                ballDir = ballDir * RAD2DEG;
+                ballDir -= 180;
+                if (ballDir < 0) ballDir += 360;
+                double angleDiff = abs(ballDir - playerPaddle.GetPaddleNormal() * RAD2DEG);
+                ballDir = ballDir + angleDiff * 2;
+                gameBall.UpdateMoveDir(ballDir * DEG2RAD);
 
-            // https://answers.unity.com/questions/880103/vector-based-pong-ball-bounce-calculations.html
-            Vector2 ballVelocity = gameBall.velocity;
-            ballVelocity = NormaliseVector(ballVelocity);
-            Vector2 playerNormalAsVector;
-            playerNormalAsVector.x = cos(playerPaddle.GetPaddleNormal());
-            playerNormalAsVector.y = sin(playerPaddle.GetPaddleNormal());
-            double dotProd = DotVectors(gameBall.velocity, playerNormalAsVector);
-
-            //double tmpAngle = gameBall.moveDir;
-            //tmpAngle = tmpAngle * RAD2DEG;
-            //tmpAngle = tmpAngle - 180;
-            //if (tmpAngle < 0) tmpAngle += 360;
-            //double angleDiff = abs(tmpAngle - playerPaddle.angle);
-            //tmpAngle = tmpAngle + angleDiff * 2;
-            //gameBall.UpdateMoveDir(tmpAngle);
-
-
-            DrawRectangle(rec.x, rec.y, rec.width, rec.height, RED);
+                DrawRectangle(rec.x, rec.y, rec.width, rec.height, RED);
+            }
+        }
+        else
+        {
+            deltaFrames++;
+            if (deltaFrames >= 15)
+            {
+                deltaFrames = 0;
+                gameBall.collidable = true;
+            }
         }
         DrawCircle(gameBall.position.x, gameBall.position.y, gameBall.size, BLUE);
 
@@ -99,20 +102,4 @@ int main(int argc, char* argv[])
     //--------------------------------------------------------------------------------------
 
     return 0;
-}
-
-double DotVectors(Vector2 lhs, Vector2 rhs)
-{
-    return lhs.x * rhs.x + lhs.y * rhs.y;
-}
-Vector2 NormaliseVector(Vector2 v)
-{
-    Vector2 v2;
-    v2.x = v.x / Magnitude(v);
-    v2.y = v.y / Magnitude(v);
-    return v2;
-}
-double Magnitude(Vector2 v)
-{
-    return sqrt(v.x * v.x + v.y * v.y);
 }

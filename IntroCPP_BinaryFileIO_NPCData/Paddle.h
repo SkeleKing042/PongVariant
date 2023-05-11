@@ -17,7 +17,7 @@ private:
 	double distanceFromCenter;
 
 public:
-	Paddle(double speed, double width, double height, double radius);
+	Paddle(double speed, double width, double height, double radius, double angle);
 	~Paddle();
 
 	void MovePaddle(int inputDir);

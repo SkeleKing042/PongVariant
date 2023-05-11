@@ -13,6 +13,7 @@ public:
 	double moveDir;
 	double speed;
 	double size;
+	bool collidable;
 
 public:
 	Ball(double givenSpeed, double givenSize, double givenDir);
@@ -21,4 +22,5 @@ public:
 	void MoveBall();
 	void UpdateMoveDir(double newAngle);
 	double GetMovementDir();
+	void CollisionsFlipSwitch();
 };

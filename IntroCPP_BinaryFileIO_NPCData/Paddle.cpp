@@ -4,10 +4,10 @@
 
 using namespace std;
 
-Paddle::Paddle(double givenSpeed, double givenWidth, double givenHeight, double givenRadius)
+Paddle::Paddle(double givenSpeed, double givenWidth, double givenHeight, double givenRadius, double givenAngle)
 {
 	speed = givenSpeed;
-	angle = 0;
+	angle = givenAngle * DEG2RAD;
 	size.first = givenWidth;
 	size.second = givenHeight;
 	distanceFromCenter = givenRadius;
@@ -47,7 +47,7 @@ void Paddle::MovePaddle(int inputDir)
 double Paddle::GetPaddleNormal()
 {
 	double normalAngle = 0;
-	normalAngle = ((angle * RAD2DEG) - 90);
+	normalAngle = 180 + (angle * RAD2DEG);
 	if (normalAngle < 0) normalAngle += 360;
 	return normalAngle * DEG2RAD;
 }
