@@ -10,8 +10,8 @@ Ball::Ball(double givenSpeed, double givenSize, double giveDir)
 	collidable = true;
 	speed = givenSpeed;
 	size = givenSize;
-	position.x = GetScreenWidth() / 2;
-	position.y = GetScreenHeight() / 2;
+	position.x = 150;
+	position.y = 150;
 	moveDir = giveDir * DEG2RAD;
 	velocity.x = cos(moveDir);
 	velocity.y = sin(moveDir);
@@ -35,8 +35,8 @@ void Ball::MoveBall()
 	// Needs to be changed to fit new moveDir stuff
 	if (position.x <= 0 + size || position.x >= GetScreenWidth() - size || position.y <= 0 + size || position.y >= GetScreenHeight() - size)
 	{
-		exit(0);
-	}
+		exit(420);
+ 	}
 
 }
 void Ball::UpdateMoveDir(double newAngle)

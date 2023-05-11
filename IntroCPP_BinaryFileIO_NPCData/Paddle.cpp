@@ -49,5 +49,6 @@ double Paddle::GetPaddleNormal()
 	double normalAngle = 0;
 	normalAngle = 180 + (angle * RAD2DEG);
 	if (normalAngle < 0) normalAngle += 360;
+	if (normalAngle > 360) normalAngle -= 360;
 	return normalAngle * DEG2RAD;
 }

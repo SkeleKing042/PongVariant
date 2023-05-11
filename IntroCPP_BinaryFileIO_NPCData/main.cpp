@@ -24,6 +24,7 @@
 #include "Ball.h"
 #include <iostream>
 #include <string.h>
+#include <sstream>
 
 int main(int argc, char* argv[])
 {
@@ -35,9 +36,10 @@ int main(int argc, char* argv[])
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
     double PaddleRadius = screenWidth / 2 - 10;
-    double random = rand() % 1;
-    Paddle playerPaddle(0.05, 10, 50, PaddleRadius, random);
-    Ball gameBall(2, 5, random);
+    double random = rand() % 360;
+    Paddle playerPaddle(0.05, 10, 70, PaddleRadius, random);
+    Ball gameBall(2, 10, random);
+    int score = 0;
 
     SetTargetFPS(60);
     int deltaFrames = 0;
@@ -45,9 +47,9 @@ int main(int argc, char* argv[])
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        if (IsKeyDown(KEY_UP))
+        if (IsKeyDown(KEY_UP) || GetMouseWheelMove() > 0)
             playerPaddle.MovePaddle(0);
-        if (IsKeyDown(KEY_DOWN))
+        if (IsKeyDown(KEY_DOWN) || GetMouseWheelMove() < 0)
             playerPaddle.MovePaddle(1);
 
         gameBall.MoveBall();
@@ -69,14 +71,28 @@ int main(int argc, char* argv[])
             if (CheckCollisionCircleRec(ballPos, gameBall.size, rec))
             {
                 gameBall.collidable = false;
-                gameBall.speed += 0.05;
-                double ballDir = gameBall.moveDir;
+                gameBall.speed += 0.2;
+                
+                double ballDir = gameBall.moveDir * RAD2DEG;
+                double newAngle = 180 + (ballDir - playerPaddle.angle * RAD2DEG);
+                if (newAngle < 0) newAngle += 360;
+                newAngle = 360 - newAngle + (playerPaddle.angle *RAD2DEG);
+                //double oppositeAngle = (360 - newAngle * 2) / 2;
+                //newAngle -= oppositeAngle;
+                gameBall.UpdateMoveDir(newAngle * DEG2RAD);
+
+                /*double ballDir = gameBall.moveDir;
                 ballDir = ballDir * RAD2DEG;
                 ballDir -= 180;
                 if (ballDir < 0) ballDir += 360;
-                double angleDiff = abs(ballDir - playerPaddle.GetPaddleNormal() * RAD2DEG);
-                ballDir = ballDir + angleDiff * 2;
-                gameBall.UpdateMoveDir(ballDir * DEG2RAD);
+                double angleDiff = ballDir - playerPaddle.GetPaddleNormal() * RAD2DEG;
+                ballDir = playerPaddle.GetPaddleNormal() * RAD2DEG + angleDiff;
+                gameBall.UpdateMoveDir(ballDir * DEG2RAD);*/
+
+
+
+                // Flip Velocity idea using vector3
+                score++;
 
                 DrawRectangle(rec.x, rec.y, rec.width, rec.height, RED);
             }
@@ -90,7 +106,11 @@ int main(int argc, char* argv[])
                 gameBall.collidable = true;
             }
         }
+         
         DrawCircle(gameBall.position.x, gameBall.position.y, gameBall.size, BLUE);
+        string s = to_string(score);
+        char const* pchar = s.c_str();
+        DrawText(pchar, 10, 10, 32, WHITE);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
