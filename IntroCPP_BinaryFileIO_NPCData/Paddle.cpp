@@ -26,6 +26,7 @@ Paddle::~Paddle()
 
 void Paddle::MovePaddle(int inputDir)
 {
+	//Change the paddle angle depending on the player input
 	switch (inputDir)
 	{
 	case 0:
@@ -35,20 +36,14 @@ void Paddle::MovePaddle(int inputDir)
 		angle += speed;
 		break;
 	}
+
+	//Update positions
 	rec.x = GetScreenWidth() / 2 + cos(angle) * distanceFromCenter;
 	rec.y = GetScreenHeight() / 2 + sin(angle) * distanceFromCenter;
 
-	// Resets player angle if angle is too high or low
+	//Resets player angle if angle is too high or low
 	if (angle > PI * 2)
 		angle -= PI * 2;
 	if (angle < 0)
 		angle += PI * 2;
-}
-double Paddle::GetPaddleNormal()
-{
-	double normalAngle = 0;
-	normalAngle = 180 + (angle * RAD2DEG);
-	if (normalAngle < 0) normalAngle += 360;
-	if (normalAngle > 360) normalAngle -= 360;
-	return normalAngle * DEG2RAD;
 }

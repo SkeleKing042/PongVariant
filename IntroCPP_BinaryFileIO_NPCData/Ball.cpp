@@ -15,8 +15,6 @@ Ball::Ball(double givenSpeed, double givenSize, double giveDir)
 	moveDir = giveDir * DEG2RAD;
 	velocity.x = cos(moveDir);
 	velocity.y = sin(moveDir);
-	//momentum.push_back(givenMomentum[0] * speed);
-	//momentum.push_back(givenMomentum[1] * speed);
 }
 
 Ball::~Ball()
@@ -30,26 +28,15 @@ void Ball::MoveBall()
 	position.x += velocity.x * speed;
 	position.y += velocity.y * speed;
 
-	// Screen edge detection
-	// Scales with ball size
-	// Needs to be changed to fit new moveDir stuff
+	//Close game upon ball hiting wall
+	//Scales with ball size
 	if (position.x <= 0 + size || position.x >= GetScreenWidth() - size || position.y <= 0 + size || position.y >= GetScreenHeight() - size)
-	{
 		exit(420);
- 	}
-
 }
 void Ball::UpdateMoveDir(double newAngle)
 {
+	//Set the movement direction to the given angle and update the velocity of the ball
 	moveDir = newAngle;
 	velocity.x = cos(moveDir);
 	velocity.y = sin(moveDir);
-}
-double Ball::GetMovementDir()
-{
-	//cout << "x Dir: " << 90 * momentum[0] << " | y Dir: " << 
-	return 0;
-}
-void Ball::CollisionsFlipSwitch()
-{
 }

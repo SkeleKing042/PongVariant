@@ -22,104 +22,110 @@
 #include "raylib.h"
 #include "Paddle.h"
 #include "Ball.h"
+#include "GameDefines.h"
 #include <iostream>
 #include <string.h>
 #include <sstream>
 
 int main(int argc, char* argv[])
 {
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    int screenWidth = 300;
+    //Initialization
+    //Display window setup
+    int screenWidth = SCREENSIZE;
     int screenHeight = screenWidth;
-
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    SetTargetFPS(FPS);
+    int deltaFrames = 0;
 
-    double PaddleRadius = screenWidth / 2 - 10;
-    double random = rand() % 360;
-    Paddle playerPaddle(0.05, 10, 70, PaddleRadius, random);
-    Ball gameBall(2, 10, random);
+    //Ball and Paddle setup
+    double PaddleRadius = screenWidth / 2 - PADDLEPOSOFFSET;
+    double random = rand() % MAXRANDOMSTARTPOSTION;
+    Paddle playerPaddle(PADDLESPEED, PADDLEWIDTH, PADDLEHEIGHT, PaddleRadius, random);
+    Ball gameBall(INITIALBALLSPEED, BALLSIZE, random);
+
+    //score
     int score = 0;
 
-    SetTargetFPS(60);
-    int deltaFrames = 0;
-    //--------------------------------------------------------------------------------------
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
+        //Player input checks
         if (IsKeyDown(KEY_UP) || GetMouseWheelMove() > 0)
             playerPaddle.MovePaddle(0);
         if (IsKeyDown(KEY_DOWN) || GetMouseWheelMove() < 0)
             playerPaddle.MovePaddle(1);
 
+        //Moving the ball
         gameBall.MoveBall();
+
+
         // Draw
-        //----------------------------------------------------------------------------------
         BeginDrawing();
+
 
         ClearBackground(BLACK);
 
-        DrawRectanglePro(playerPaddle.rec, playerPaddle.recCenter, RAD2DEG * playerPaddle.angle, GREEN);
-        Vector2 ballPos;
-        ballPos.x = gameBall.position.x;
-        ballPos.y = gameBall.position.y;
-        Rectangle rec = playerPaddle.rec;
-        rec.x = playerPaddle.rec.x - playerPaddle.rec.width / 2;
-        rec.y = playerPaddle.rec.y - playerPaddle.rec.height / 2;
+        //Draw player paddle
+        DrawRectanglePro(playerPaddle.rec, playerPaddle.recCenter, RAD2DEG * playerPaddle.angle, WHITE);
+
+        //Finding player center
+        Vector2 playerCenter;
+        playerCenter.x = screenWidth / 2 + cos(playerPaddle.angle) * PaddleRadius;
+        playerCenter.y = screenHeight / 2 + sin(playerPaddle.angle) * PaddleRadius;
+
+        //Ball and paddle collision check
         if (gameBall.collidable)
         {
-            if (CheckCollisionCircleRec(ballPos, gameBall.size, rec))
+            if(CheckCollisionCircles(gameBall.position, gameBall.size, playerCenter, playerPaddle.size.second / 3))
             {
+                //Disable ball collisions
                 gameBall.collidable = false;
-                gameBall.speed += 0.2;
-                
-                double ballDir = gameBall.moveDir * RAD2DEG;
-                double newAngle = 180 + (ballDir - playerPaddle.angle * RAD2DEG);
-                if (newAngle < 0) newAngle += 360;
-                newAngle = 360 - newAngle + (playerPaddle.angle *RAD2DEG);
-                //double oppositeAngle = (360 - newAngle * 2) / 2;
-                //newAngle -= oppositeAngle;
-                gameBall.UpdateMoveDir(newAngle * DEG2RAD);
-
-                /*double ballDir = gameBall.moveDir;
-                ballDir = ballDir * RAD2DEG;
-                ballDir -= 180;
-                if (ballDir < 0) ballDir += 360;
-                double angleDiff = ballDir - playerPaddle.GetPaddleNormal() * RAD2DEG;
-                ballDir = playerPaddle.GetPaddleNormal() * RAD2DEG + angleDiff;
-                gameBall.UpdateMoveDir(ballDir * DEG2RAD);*/
-
-
-
-                // Flip Velocity idea using vector3
+                //Increase ball speed and score
+                gameBall.speed += BALLSPEEDINCREASE;
                 score++;
-
-                DrawRectangle(rec.x, rec.y, rec.width, rec.height, RED);
+                
+                //Get ball movement direction
+                double ballDir = gameBall.moveDir * RAD2DEG;
+                //Reduce the ball movement angle by the player paddle angle
+                //This is done to achieve a neutral calculation start for the ball's new movement
+                //direction.
+                //Basically, we always calculate the next ball position as though the paddle is at
+                //0 degrees.
+                //180 is added to flip the ball's movement angle
+                double newAngle = 180 + (ballDir - playerPaddle.angle * RAD2DEG);
+                //Angles shouldn't be below 0, so we add 360
+                //^ -135 = 225
+                if (newAngle < 0) newAngle += 360;
+                //We take is new angle and reduce 360 by it then add back the player angle from
+                //before
+                newAngle = 360 - newAngle + (playerPaddle.angle *RAD2DEG);
+                //Update the ball's movement direction
+                gameBall.UpdateMoveDir(newAngle * DEG2RAD);
             }
         }
         else
         {
+            //After a collision, wait a certain number of frames, then enable collisions
             deltaFrames++;
-            if (deltaFrames >= 15)
+            if (deltaFrames >= BALLCOLISIONCHECKCOOLDOWN)
             {
                 deltaFrames = 0;
                 gameBall.collidable = true;
             }
         }
-         
-        DrawCircle(gameBall.position.x, gameBall.position.y, gameBall.size, BLUE);
+        
+        //Draw the ball
+        DrawCircle(gameBall.position.x, gameBall.position.y, gameBall.size, WHITE);
+
+        //Draw the score
         string s = to_string(score);
         char const* pchar = s.c_str();
         DrawText(pchar, 10, 10, 32, WHITE);
 
         EndDrawing();
-        //----------------------------------------------------------------------------------
     }
 
-    // De-Initialization
-    //--------------------------------------------------------------------------------------   
     CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
 
     return 0;
 }

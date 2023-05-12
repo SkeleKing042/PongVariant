@@ -21,6 +21,4 @@ public:
 
 	void MoveBall();
 	void UpdateMoveDir(double newAngle);
-	double GetMovementDir();
-	void CollisionsFlipSwitch();
 };

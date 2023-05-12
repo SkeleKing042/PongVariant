@@ -21,6 +21,4 @@ public:
 	~Paddle();
 
 	void MovePaddle(int inputDir);
-
-	double GetPaddleNormal();
 };
