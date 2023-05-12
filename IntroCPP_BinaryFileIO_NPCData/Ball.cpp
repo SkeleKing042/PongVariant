@@ -3,6 +3,7 @@
 #include <iostream>
 #include <conio.h>
 #include <dos.h>
+#include "GameDefines.h"
 using namespace std;
 
 Ball::Ball(double givenSpeed, double givenSize, double giveDir)
@@ -10,11 +11,19 @@ Ball::Ball(double givenSpeed, double givenSize, double giveDir)
 	collidable = true;
 	speed = givenSpeed;
 	size = givenSize;
-	position.x = 150;
-	position.y = 150;
-	moveDir = giveDir * DEG2RAD;
-	velocity.x = cos(moveDir);
-	velocity.y = sin(moveDir);
+
+	//Generates a random int based off the screen size and use it to give the ball a random start
+	//point each game
+	int offset = rand() % (int)round(SCREENSIZE * STARTINGOFFSETSCALAR);
+	if (offset % 2 == 0)
+		offset *= -1;
+	position.x = SCREENSIZE / 2 + offset;
+	offset = rand() % (int)round(SCREENSIZE * STARTINGOFFSETSCALAR);
+	if (offset % 2 == 0)
+		offset *= -1;
+	position.y = SCREENSIZE / 2 + offset;
+
+	UpdateMoveDir(giveDir * DEG2RAD);
 }
 
 Ball::~Ball()
@@ -30,7 +39,7 @@ void Ball::MoveBall()
 
 	//Close game upon ball hiting wall
 	//Scales with ball size
-	if (position.x <= 0 + size || position.x >= GetScreenWidth() - size || position.y <= 0 + size || position.y >= GetScreenHeight() - size)
+	if (position.x <= 0 + size || position.x >= SCREENSIZE - size || position.y <= 0 + size || position.y >= SCREENSIZE - size)
 		exit(420);
 }
 void Ball::UpdateMoveDir(double newAngle)

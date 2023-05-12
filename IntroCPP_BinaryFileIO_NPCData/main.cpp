@@ -50,9 +50,9 @@ int main(int argc, char* argv[])
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         //Player input checks
-        if (IsKeyDown(KEY_UP) || GetMouseWheelMove() > 0)
+        if (IsKeyDown(KEY_UP) || GetMouseWheelMove() > 0 || IsKeyDown(KEY_RIGHT))
             playerPaddle.MovePaddle(0);
-        if (IsKeyDown(KEY_DOWN) || GetMouseWheelMove() < 0)
+        if (IsKeyDown(KEY_DOWN) || GetMouseWheelMove() < 0 || IsKeyDown(KEY_LEFT))
             playerPaddle.MovePaddle(1);
 
         //Moving the ball
@@ -64,6 +64,11 @@ int main(int argc, char* argv[])
 
 
         ClearBackground(BLACK);
+
+        //Draw the score
+        string s = to_string(score);
+        char const* pchar = s.c_str();
+        DrawText(pchar, TEXTOFFSETX, TEXTOFFSETY, TEXTSIZE, DARKGRAY);
 
         //Draw player paddle
         DrawRectanglePro(playerPaddle.rec, playerPaddle.recCenter, RAD2DEG * playerPaddle.angle, WHITE);
@@ -120,10 +125,6 @@ int main(int argc, char* argv[])
         //Draw the ball
         DrawCircleV(gameBall.position, gameBall.size, WHITE);
 
-        //Draw the score
-        string s = to_string(score);
-        char const* pchar = s.c_str();
-        DrawText(pchar, TEXTOFFSETX, TEXTOFFSETY, TEXTSIZE, WHITE);
 
         EndDrawing();
     }
