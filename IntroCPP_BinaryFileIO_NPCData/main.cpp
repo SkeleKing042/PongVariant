@@ -76,14 +76,14 @@ int main(int argc, char* argv[])
         //Ball and paddle collision check
         if (gameBall.collidable)
         {
-            if(CheckCollisionCircles(gameBall.position, gameBall.size, playerCenter, playerPaddle.size.second / 3))
+            if (CheckCollisionCircles(gameBall.position, gameBall.size, playerCenter, playerPaddle.size.second / 3))
             {
                 //Disable ball collisions
                 gameBall.collidable = false;
                 //Increase ball speed and score
                 gameBall.speed += BALLSPEEDINCREASE;
                 score++;
-                
+
                 //Get ball movement direction
                 double ballDir = gameBall.moveDir * RAD2DEG;
                 //Reduce the ball movement angle by the player paddle angle
@@ -96,9 +96,12 @@ int main(int argc, char* argv[])
                 //Angles shouldn't be below 0, so we add 360
                 //^ -135 = 225
                 if (newAngle < 0) newAngle += 360;
+                //Generating a random offset
+                int randomOffset = rand() % RANDOMANGLEADDITION;
+                if ((randomOffset % 2) == 0) randomOffset *= -1;
                 //We take is new angle and reduce 360 by it then add back the player angle from
-                //before
-                newAngle = 360 - newAngle + (playerPaddle.angle *RAD2DEG);
+                //before, before added the random offset
+                newAngle = 360 - newAngle + (playerPaddle.angle * RAD2DEG) + randomOffset;
                 //Update the ball's movement direction
                 gameBall.UpdateMoveDir(newAngle * DEG2RAD);
             }
@@ -115,12 +118,12 @@ int main(int argc, char* argv[])
         }
         
         //Draw the ball
-        DrawCircle(gameBall.position.x, gameBall.position.y, gameBall.size, WHITE);
+        DrawCircleV(gameBall.position, gameBall.size, WHITE);
 
         //Draw the score
         string s = to_string(score);
         char const* pchar = s.c_str();
-        DrawText(pchar, 10, 10, 32, WHITE);
+        DrawText(pchar, TEXTOFFSETX, TEXTOFFSETY, TEXTSIZE, WHITE);
 
         EndDrawing();
     }
