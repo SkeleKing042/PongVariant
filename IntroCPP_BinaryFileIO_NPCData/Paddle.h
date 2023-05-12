@@ -13,12 +13,15 @@ public:
 	pair<double, double> size;
 	Rectangle rec;
 	Vector2 recCenter;
-private:
 	double distanceFromCenter;
+
+	pair<pair<Vector2, Vector2>, pair<Vector2, Vector2>> corners;
 
 public:
 	Paddle(double speed, double width, double height, double radius, double angle);
 	~Paddle();
 
 	void MovePaddle(int inputDir);
+
+	void SetCorners();
 };

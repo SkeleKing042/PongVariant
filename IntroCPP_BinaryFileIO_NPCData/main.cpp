@@ -62,26 +62,22 @@ int main(int argc, char* argv[])
         // Draw
         BeginDrawing();
 
-
         ClearBackground(BLACK);
 
         //Draw the score
         string s = to_string(score);
         char const* pchar = s.c_str();
-        DrawText(pchar, TEXTOFFSETX, TEXTOFFSETY, TEXTSIZE, DARKGRAY);
+        DrawText(pchar, TEXTOFFSETX, TEXTOFFSETY, TEXTSIZE, NOTEXACTLYBLACK);
 
         //Draw player paddle
-        DrawRectanglePro(playerPaddle.rec, playerPaddle.recCenter, RAD2DEG * playerPaddle.angle, WHITE);
-
-        //Finding player center
-        Vector2 playerCenter;
-        playerCenter.x = screenWidth / 2 + cos(playerPaddle.angle) * PaddleRadius;
-        playerCenter.y = screenHeight / 2 + sin(playerPaddle.angle) * PaddleRadius;
+        DrawTriangle(playerPaddle.corners.second.second, playerPaddle.corners.first.second, playerPaddle.corners.first.first, WHITE);
+        DrawTriangle(playerPaddle.corners.first.first, playerPaddle.corners.second.first, playerPaddle.corners.second.second, LIGHTGRAY);
 
         //Ball and paddle collision check
         if (gameBall.collidable)
         {
-            if (CheckCollisionCircles(gameBall.position, gameBall.size, playerCenter, playerPaddle.size.second / 3))
+            //Check if the ball passed either of the triangles
+            if (CheckCollisionPointTriangle(gameBall.position, playerPaddle.corners.second.second, playerPaddle.corners.first.second, playerPaddle.corners.first.first) || CheckCollisionPointTriangle(gameBall.position, playerPaddle.corners.first.first, playerPaddle.corners.second.first, playerPaddle.corners.second.second))
             {
                 //Disable ball collisions
                 gameBall.collidable = false;
@@ -124,7 +120,6 @@ int main(int argc, char* argv[])
         
         //Draw the ball
         DrawCircleV(gameBall.position, gameBall.size, WHITE);
-
 
         EndDrawing();
     }

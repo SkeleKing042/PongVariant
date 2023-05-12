@@ -1,22 +1,54 @@
-#pragma once
+#pragma once //never twice
 
-const int SCREENSIZE = 300;
-const int FPS = 60;
+//----------------------------------//
+//        SCREEN SETTINGS			//
+//----------------------------------//
 
-const double PADDLEPOSOFFSET = 10;
-const double PADDLESPEED = 0.05;
-const double PADDLEWIDTH = 10;
-const double PADDLEHEIGHT = 70;
 
-const double STARTINGOFFSETSCALAR = 0.1;
-const double INITIALBALLSPEED = 1;
-const double BALLSPEEDINCREASE = 0.05;
-const double BALLSIZE = 10;
-const int BALLCOLISIONCHECKCOOLDOWN = 10;
+#define SCREENSIZE					300
+#define FPS							60
 
-const int TEXTOFFSETX = 0;
-const int TEXTOFFSETY = SCREENSIZE * 0.0833;
-const int TEXTSIZE = SCREENSIZE - (SCREENSIZE * 0.0833);
 
-const int MAXRANDOMSTARTPOSTION = 360;
-const int RANDOMANGLEADDITION = 21;
+//----------------------------------//
+//         PADDLE SETTINGS			//
+//----------------------------------//
+
+#define PADDLEPOSOFFSET				10
+#define PADDLESPEED					0.04
+#define PADDLEWIDTH					10
+#define PADDLEHEIGHT				50
+
+
+//----------------------------------//
+//          BALL SETTINGS			//
+//----------------------------------//
+
+#define STARTINGOFFSETSCALAR		0.1
+#define INITIALBALLSPEED			1
+#define BALLSPEEDINCREASE			0.1
+#define BALLSIZE					2
+#define BALLCOLISIONCHECKCOOLDOWN	5
+
+
+//----------------------------------//
+//     SCORE DISPLAY SETTINGS		//
+//----------------------------------//
+
+
+#define TEXTOFFSETX					0
+#define TEXTOFFSETY					SCREENSIZE * 0.0833
+#define TEXTSIZE					SCREENSIZE - (SCREENSIZE * 0.0833)
+
+
+//----------------------------------//
+//          RNG SETTINGS			//
+//----------------------------------//
+
+#define MAXRANDOMSTARTPOSTION		360
+#define RANDOMANGLEADDITION			21
+
+//----------------------------------//
+//			   EXTRAS				//
+//----------------------------------//
+
+#define NOTEXACTLYBLACK				CLITERAL(Color){40, 40, 40, 255}
