@@ -4,7 +4,6 @@
 //        SCREEN SETTINGS			//
 //----------------------------------//
 
-
 #define SCREENSIZE					300
 #define FPS							60
 
@@ -17,6 +16,8 @@
 #define PADDLESPEED					0.04
 #define PADDLEWIDTH					10
 #define PADDLEHEIGHT				50
+#define MOVEPADDLELEFT				KEY_LEFT
+#define MOVEPADDLERIGHT				KEY_RIGHT
 
 
 //----------------------------------//
@@ -31,13 +32,18 @@
 
 
 //----------------------------------//
-//     SCORE DISPLAY SETTINGS		//
+//      TEXT DISPLAY SETTINGS		//
 //----------------------------------//
 
+// SCORE //
+#define SCORETEXTOFFSETX			0
+#define SCORETEXTOFFSETY			SCREENSIZE * 0.0833
+#define SCORETEXTSIZE				SCREENSIZE - (SCREENSIZE * 0.0833)
 
-#define TEXTOFFSETX					0
-#define TEXTOFFSETY					SCREENSIZE * 0.0833
-#define TEXTSIZE					SCREENSIZE - (SCREENSIZE * 0.0833)
+// GAME OVER //
+#define GOTEXTOFFSETX				0
+#define GOTEXTSIZE					SCREENSIZE * 0.2
+#define GOTEXTOFFSETY				SCREENSIZE / 2 - GOTEXTSIZE / 2
 
 
 //----------------------------------//

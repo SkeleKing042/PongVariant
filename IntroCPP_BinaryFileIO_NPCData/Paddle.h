@@ -18,8 +18,10 @@ public:
 	pair<pair<Vector2, Vector2>, pair<Vector2, Vector2>> corners;
 
 public:
-	Paddle(double speed, double width, double height, double radius, double angle);
+	Paddle();
 	~Paddle();
+
+	void Init(double speed, double width, double height, double radius, double angle);
 
 	void MovePaddle(int inputDir);
 

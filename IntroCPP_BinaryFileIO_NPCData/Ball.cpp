@@ -6,7 +6,15 @@
 #include "GameDefines.h"
 using namespace std;
 
-Ball::Ball(double givenSpeed, double givenSize, double giveDir)
+Ball::Ball()
+{ }
+
+Ball::~Ball()
+{
+
+}
+
+void Ball::Init(double givenSpeed, double givenSize, double giveDir)
 {
 	collidable = true;
 	speed = givenSpeed;
@@ -26,21 +34,11 @@ Ball::Ball(double givenSpeed, double givenSize, double giveDir)
 	UpdateMoveDir(giveDir * DEG2RAD);
 }
 
-Ball::~Ball()
-{
-
-}
-
 void Ball::MoveBall()
 {
 	// Moves the ball based on its momentum
 	position.x += velocity.x * speed;
-	position.y += velocity.y * speed;
-
-	//Close game upon ball hiting wall
-	//Scales with ball size
-	if (position.x <= 0 + size || position.x >= SCREENSIZE - size || position.y <= 0 + size || position.y >= SCREENSIZE - size)
-		exit(420);
+	position.y += velocity.y * speed;		
 }
 void Ball::UpdateMoveDir(double newAngle)
 {

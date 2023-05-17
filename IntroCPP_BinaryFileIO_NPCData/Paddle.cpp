@@ -5,7 +5,13 @@
 
 using namespace std;
 
-Paddle::Paddle(double givenSpeed, double givenWidth, double givenHeight, double givenRadius, double givenAngle)
+Paddle::Paddle()
+{ }
+
+Paddle::~Paddle()
+{ }
+
+void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, double givenRadius, double givenAngle)
 {
 	speed = givenSpeed;
 	angle = givenAngle * DEG2RAD;
@@ -20,11 +26,6 @@ Paddle::Paddle(double givenSpeed, double givenWidth, double givenHeight, double 
 	recCenter.y = size.second / 2;
 
 	SetCorners();
-}
-
-Paddle::~Paddle()
-{
-
 }
 
 void Paddle::MovePaddle(int inputDir)

@@ -16,8 +16,10 @@ public:
 	bool collidable;
 
 public:
-	Ball(double givenSpeed, double givenSize, double givenDir);
+	Ball();
 	~Ball();
+
+	void Init(double givenSpeed, double givenSize, double givenDir);
 
 	void MoveBall();
 	void UpdateMoveDir(double newAngle);
