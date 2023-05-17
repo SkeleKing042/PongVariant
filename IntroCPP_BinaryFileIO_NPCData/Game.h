@@ -21,5 +21,13 @@ private:
 	Ball gameBall;
 
 	int score = 0;
-	bool gameOver = false;
+	//bool gameOver = false;
+
+	enum GameState
+	{
+		startMenu,
+		playing,
+		gameOver
+	};
+	GameState state;
 };

@@ -18,7 +18,8 @@ void Game::Initalisation()
 
     //Scoring and game logic 
     score = 0;
-    gameOver = false;
+    state = playing;
+    //gameOver = false;
 
     //Used for seeing the number of frames since a given action
     deltaFrames = 0;
@@ -26,7 +27,7 @@ void Game::Initalisation()
 
 void Game::Update()
 {
-    if (!gameOver)
+    if (state == playing)
     {
         //Player input checks
         if (IsKeyDown(MOVEPADDLERIGHT))
@@ -40,7 +41,7 @@ void Game::Update()
         //Close game upon ball hiting wall
         //Scales with ball size
         if (gameBall.position.x <= 0 + gameBall.size || gameBall.position.x >= SCREENSIZE - gameBall.size || gameBall.position.y <= 0 + gameBall.size || gameBall.position.y >= SCREENSIZE - gameBall.size)
-            gameOver = true;
+            state = gameOver;
     }
 }
 
@@ -54,9 +55,9 @@ void Game::Draw()
     }
     const char* pchar = s.c_str();
     DrawText(pchar, SCORETEXTOFFSETX, SCORETEXTOFFSETY, SCORETEXTSIZE, NOTEXACTLYBLACK);
-    if (!gameOver)
-    {
 
+    if (state == playing)
+    {
         //Draw player paddle
         DrawTriangle(playerPaddle.corners.second.second, playerPaddle.corners.first.second, playerPaddle.corners.first.first, WHITE);
         DrawTriangle(playerPaddle.corners.first.first, playerPaddle.corners.second.first, playerPaddle.corners.second.second, LIGHTGRAY);
@@ -70,8 +71,11 @@ void Game::Draw()
                 //Disable ball collisions
                 gameBall.collidable = false;
                 //Increase ball speed and score
-                gameBall.speed += BALLSPEEDINCREASE;
                 score++;
+                if (score <= BALLSCORELIMIT)
+                {
+                    gameBall.speed = BALLSPEEDSCALAR * score + INITIALBALLSPEED;
+                }
                 //Update the displayed score
 
                 //Get ball movement direction
@@ -112,10 +116,15 @@ void Game::Draw()
     }
     else
     {
-        DrawText("YOU LOSE", GOTEXTOFFSETX, GOTEXTOFFSETY, GOTEXTSIZE, WHITE);
+        DrawText("YOU LOSE", GOTEXTOFFSETX + OUTLINESIZE, GOTEXTOFFSETY - OUTLINESIZE, GOTEXTSIZE, NOTEXACTLYBLACK);
+        DrawText("YOU LOSE", GOTEXTOFFSETX + OUTLINESIZE, GOTEXTOFFSETY + OUTLINESIZE, GOTEXTSIZE, NOTEXACTLYBLACK);
+        DrawText("YOU LOSE", GOTEXTOFFSETX - OUTLINESIZE, GOTEXTOFFSETY - OUTLINESIZE, GOTEXTSIZE, NOTEXACTLYBLACK);
+        DrawText("YOU LOSE", GOTEXTOFFSETX - OUTLINESIZE, GOTEXTOFFSETY + OUTLINESIZE, GOTEXTSIZE, NOTEXACTLYBLACK);
+        DrawText("YOU LOSE", GOTEXTOFFSETX, GOTEXTOFFSETY, GOTEXTSIZE, BLACK);
+
         if (IsKeyDown(KEY_ENTER))
         {
-            gameOver = false;
+            state = playing;
             Initalisation();
         }
     }
