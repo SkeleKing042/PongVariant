@@ -30,6 +30,8 @@ private:
 
 	int deltaFrames = 0;
 	double angle = 0;
+	double scalesSaved[5] = { TIER1, TIER2, TIER3, TIER4, TIER5 };
+	double* scalePointer = 0;
 	
 	Paddle playerPaddle;
 	Ball gameBall;

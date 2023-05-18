@@ -35,11 +35,11 @@ void Ball::Init(double givenSpeed, double givenSize, double givenDir)
 	UpdateMoveDir(givenDir * DEG2RAD);
 }
 
-void Ball::MoveBall()
+void Ball::MoveBall(double s)
 {
 	// Moves the ball based on its momentum
-	position.x += velocity.x * speed;
-	position.y += velocity.y * speed;		
+	position.x += velocity.x * speed * s;
+	position.y += velocity.y * speed * s;		
 }
 void Ball::UpdateMoveDir(double newAngle)
 {

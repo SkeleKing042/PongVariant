@@ -23,7 +23,7 @@ public:
 
 	void Init(double speed, double width, double height, double radius, double angle);
 
-	void MovePaddle(int inputDir);
+	void MovePaddle(int inputDir, double scale);
 
 	void SetCorners();
 };

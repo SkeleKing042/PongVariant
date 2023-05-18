@@ -29,16 +29,20 @@ void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, doub
 	SetCorners();
 }
 
-void Paddle::MovePaddle(int inputDir)
+void Paddle::MovePaddle(int inputDir, double s)
 {
+	double speedModifier = 1;
+
+	if (IsKeyDown(KEY_SPACE))
+		speedModifier = 1 / s;
 	//Change the paddle angle depending on the player input
 	switch (inputDir)
 	{
 	case 0:
-		angle -= speed;
+		angle -= speed * s * 0.5 * speedModifier;
 		break;
 	case 1:
-		angle += speed;
+		angle += speed * s * 0.5 * speedModifier;
 		break;
 	}
 

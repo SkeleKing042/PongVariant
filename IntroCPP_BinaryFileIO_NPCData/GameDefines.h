@@ -9,6 +9,16 @@
 
 
 //----------------------------------//
+//		 DIFFICULTY SCALES			//
+//----------------------------------//
+
+#define TIER1						1.0
+#define TIER2						2.0
+#define TIER3						3.0
+#define TIER4						4.0
+#define TIER5						5.0
+
+//----------------------------------//
 //         PADDLE SETTINGS			//
 //----------------------------------//
 
@@ -25,7 +35,7 @@
 //----------------------------------//
 
 #define STARTINGOFFSETSCALAR		0.1
-#define INITIALBALLSPEED			3.0
+#define INITIALBALLSPEED			1.0
 #define BALLSCORELIMIT				20.0
 #define BALLMAXSPEED				3.0
 #define BALLSPEEDSCALAR				((BALLMAXSPEED - INITIALBALLSPEED)/BALLSCORELIMIT)
@@ -77,6 +87,13 @@
 #define STARTBUTTONCHARS			5.0
 #define STARTINPUT					KEY_ENTER
 
+// DIFFICULTY TABS //
+#define DIFFTABXMULTIPLIER			BUTTONWIDTH / 5.0
+#define DIFFTABXOFFSET              SCREENSIZE * 0.0034
+#define DIFFTABWIDTH				SCREENSIZE * 0.034
+#define DIFFTABYOFFSET				SCREENSIZE - DIFFTABWIDTH
+#define DIFFTABHEIGHT				DIFFTABWIDTH / 2.0
+
 // QUIT BUTTON //
 #define QUITBUTTONX					SCREENSIZE / 2.0 + BUTTONSPACING
 #define QUITBUTTONY					STARTBUTTONY
@@ -97,10 +114,23 @@
 //			   EXTRAS				//
 //----------------------------------//
 
+//---------//
+// COLOURS //
+//---------//
+
+// MISC
 #define NOTEXACTLYBLACK				CLITERAL(Color){40, 40, 40, 255}
 #define DEEPRED						CLITERAL(Color){80, 0, 0, 128}
 #define DEEPERRED					CLITERAL(Color){40, 0, 0, 255}
 #define HIDDENWHITE					CLITERAL(Color){255, 255, 255, 191}
+
+// PURE
 #define PURERED						CLITERAL(Color){255,0,0,255}
 #define PUREGREEN					CLITERAL(Color){0,255,0,255}
 #define PUREBLUE					CLITERAL(Color){0,0,255,255}
+
+// DIFFICULTY SCALES
+#define DIFF2						CLITERAL(Color){100, 0, 0, 64}
+#define DIFF3						CLITERAL(Color){100, 0, 0, 128}
+#define DIFF4						CLITERAL(Color){100, 0, 0, 192}
+#define DIFF5						CLITERAL(Color){100, 0, 0, 255}

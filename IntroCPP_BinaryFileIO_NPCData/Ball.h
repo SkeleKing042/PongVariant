@@ -21,6 +21,6 @@ public:
 
 	void Init(double givenSpeed, double givenSize, double givenDir);
 
-	void MoveBall();
+	void MoveBall(double scale);
 	void UpdateMoveDir(double newAngle);
 };

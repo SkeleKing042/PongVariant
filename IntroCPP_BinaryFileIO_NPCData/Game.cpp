@@ -6,13 +6,13 @@
 
 Game::Game()
 {
+    scalePointer = &scalesSaved[0];
     angle = 0;
     MenuInitalisation();
 }
 void Game::MenuInitalisation()
 {
     state = startMenu;
-
     // LOAD BUTTONS
     startButton.Init(BUTTONWIDTH, BUTTONHEIGHT, STARTBUTTONX, STARTBUTTONY);
     quitButton.Init(BUTTONWIDTH, BUTTONHEIGHT, QUITBUTTONX, QUITBUTTONY);
@@ -75,6 +75,18 @@ void Game::MenuStateUpdate()
             return;
         }
     }
+    //Player can change the difficulty by pressing 1 - 5
+    if (IsKeyPressed(KEY_ONE))
+        scalePointer = &scalesSaved[0];
+    if (IsKeyPressed(KEY_TWO))
+        scalePointer = &scalesSaved[1];
+    if (IsKeyPressed(KEY_THREE))
+        scalePointer = &scalesSaved[2];
+    if (IsKeyPressed(KEY_FOUR))
+        scalePointer = &scalesSaved[3];
+    if (IsKeyPressed(KEY_FIVE))
+        scalePointer = &scalesSaved[4];
+
     //An input (ENTER) may be used to start the game also
     if (IsKeyReleased(STARTINPUT))
     {
@@ -90,7 +102,27 @@ void Game::MenuDraw()
     ClearBackground(BLACK);
 
     //The title moves slowly up and down
-    DrawText(TITLETEXT, TITLEXPOS, TITLEYPOS + sin(angle) * TITLEMOVEMENTSCALE, TITLESIZE, RAYWHITE);
+        DrawText(TITLETEXT, TITLEXPOS, TITLEYPOS + sin(angle) * TITLEMOVEMENTSCALE, TITLESIZE, RAYWHITE);
+
+    //A red gradient gets more intense as the difficulty increases
+    if(*scalePointer == TIER5)
+        DrawRectangleGradientV(0, 0, SCREENSIZE, SCREENSIZE, BLANK, DIFF5);
+    else if(*scalePointer == TIER4)
+        DrawRectangleGradientV(0, 0, SCREENSIZE, SCREENSIZE, BLANK, DIFF4);
+    else if (*scalePointer == TIER3)
+        DrawRectangleGradientV(0, 0, SCREENSIZE, SCREENSIZE, BLANK, DIFF3);
+    else if (*scalePointer == TIER2)
+        DrawRectangleGradientV(0, 0, SCREENSIZE, SCREENSIZE, BLANK, DIFF2);
+    else
+        DrawRectangleGradientV(0, 0, SCREENSIZE, SCREENSIZE, BLANK, BLANK);
+
+    for (int i = 0; i <= 4; i++)
+    {
+        if (abs(i < *scalePointer))
+            DrawRectangle(STARTBUTTONX + i * DIFFTABXMULTIPLIER + DIFFTABXOFFSET, DIFFTABYOFFSET, DIFFTABWIDTH, DIFFTABHEIGHT, WHITE);
+        else
+            DrawRectangle(STARTBUTTONX + i * DIFFTABXMULTIPLIER + DIFFTABXOFFSET, DIFFTABYOFFSET, DIFFTABWIDTH, DIFFTABHEIGHT, GRAY);
+    }
 
     DrawRectangleRec(startButton.rec, RAYWHITE);
     DrawRectangleLinesEx(startButton.rec, 2, GRAY);
@@ -108,12 +140,12 @@ void Game::GameUpdate()
 {
     //Player input checks
     if (IsKeyDown(MOVEPADDLERIGHT))
-        playerPaddle.MovePaddle(0);
+        playerPaddle.MovePaddle(0, *scalePointer);
     if (IsKeyDown(MOVEPADDLELEFT))
-        playerPaddle.MovePaddle(1);
+        playerPaddle.MovePaddle(1, *scalePointer);
 
     //Moving the ball
-    gameBall.MoveBall();
+    gameBall.MoveBall(*scalePointer);
 
     //Close game upon ball hiting wall
     //Scales with ball size
@@ -142,7 +174,7 @@ void Game::GameDraw()
     DrawText(pchar, SCORETEXTOFFSETX, SCORETEXTOFFSETY, SCORETEXTSIZE, NOTEXACTLYBLACK);
 
     //Draw player paddle
-    DrawTriangle(playerPaddle.corners.second.second, playerPaddle.corners.first.second, playerPaddle.corners.first.first, WHITE);
+    DrawTriangle(playerPaddle.corners.second.second, playerPaddle.corners.first.second, playerPaddle.corners.first.first, RAYWHITE);
     DrawTriangle(playerPaddle.corners.first.first, playerPaddle.corners.second.first, playerPaddle.corners.second.second, LIGHTGRAY);
 
     //Draw the ball
