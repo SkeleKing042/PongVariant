@@ -25,26 +25,17 @@
 
 int main(int argc, char* argv[])
 {
+    //Initialization
     Game mainGame;
 
-    //Initialization
     //Display window setup
     InitWindow(SCREENSIZE, SCREENSIZE, "raylib [core] example - basic window");
     SetTargetFPS(FPS);
 
-    //mainGame.GameInitalisation();
-
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        // Draw
-        BeginDrawing();
-
-        ClearBackground(BLACK);
-
         mainGame.Update();
-
-        EndDrawing();
     }
 
     CloseWindow();        // Close window and OpenGL context

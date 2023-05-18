@@ -28,8 +28,8 @@ private:
 	ClickableObject startButton;
 	ClickableObject quitButton;
 
-	int deltaFrames;
-	double paddleRadius;
+	int deltaFrames = 0;
+	double angle = 0;
 	
 	Paddle playerPaddle;
 	Ball gameBall;
@@ -45,5 +45,4 @@ private:
 	};
 	GameState state;
 
-	double angle;
 };

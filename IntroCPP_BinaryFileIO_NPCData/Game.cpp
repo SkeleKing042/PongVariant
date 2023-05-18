@@ -25,9 +25,8 @@ void Game::GameInitalisation()
     score = 0;
 
     //Ball and Paddle setup
-    paddleRadius = SCREENSIZE / 2 - PADDLEPOSOFFSET;
     double random = rand() % MAXRANDOMSTARTPOSTION;
-    playerPaddle.Init(PADDLESPEED, PADDLEWIDTH, PADDLEHEIGHT, paddleRadius, random);
+    playerPaddle.Init(PADDLESPEED, PADDLEWIDTH, PADDLEHEIGHT, SCREENSIZE / 2 - PADDLEPOSOFFSET, random);
     gameBall.Init(INITIALBALLSPEED, BALLSIZE, random);
 
     //Used for seeing the number of frames since a given action
@@ -36,6 +35,7 @@ void Game::GameInitalisation()
 
 void Game::Update()
 {
+    //Check what the game's current state is and calls the approprate update function
     switch (state)
     {
     case startMenu:
@@ -50,15 +50,18 @@ void Game::Update()
     }
 
     angle += 0.04;
+    //Resets angle when reaching 0 or 360 degrees 
     if (angle > PI * 2)
         angle -= PI * 2;
     if (angle < 0)
         angle += PI * 2;
 }
 
-//IN MENUS
+// IN MENUS //
 void Game::MenuStateUpdate()
 {
+    //Check to see if player presses either button
+    //If so, call approprate functions
     if (IsMouseButtonPressed(0))
     {
         if (startButton.Clicked(GetMousePosition()))
@@ -72,6 +75,7 @@ void Game::MenuStateUpdate()
             return;
         }
     }
+    //An input (ENTER) may be used to start the game also
     if (IsKeyReleased(STARTINPUT))
     {
         GameInitalisation();
@@ -81,6 +85,11 @@ void Game::MenuStateUpdate()
 }
 void Game::MenuDraw()
 {
+    BeginDrawing();
+
+    ClearBackground(BLACK);
+
+    //The title moves slowly up and down
     DrawText(TITLETEXT, TITLEXPOS, TITLEYPOS + sin(angle) * TITLEMOVEMENTSCALE, TITLESIZE, RAYWHITE);
 
     DrawRectangleRec(startButton.rec, RAYWHITE);
@@ -91,9 +100,10 @@ void Game::MenuDraw()
     DrawRectangleLinesEx(quitButton.rec, 2, GRAY);
     DrawText(QUITBUTTONTEXT, quitButton.rec.x + quitButton.rec.width / 2 - MENUTEXTSIZE / 2.0 * QUITBUTTONCHARS / 2.0, quitButton.rec.y + quitButton.rec.height / 2.0 - MENUTEXTSIZE / 2.0, MENUTEXTSIZE, BLACK);
 
+    EndDrawing();
 }
 
-//GAME PLAYING
+// PLAYING GAME
 void Game::GameUpdate()
 {
     //Player input checks
@@ -118,6 +128,10 @@ void Game::GameUpdate()
 }
 void Game::GameDraw()
 {
+    BeginDrawing();
+
+    ClearBackground(BLACK);
+
     //Draw score
     string s = to_string(score);
     if (score < 10)
@@ -130,6 +144,9 @@ void Game::GameDraw()
     //Draw player paddle
     DrawTriangle(playerPaddle.corners.second.second, playerPaddle.corners.first.second, playerPaddle.corners.first.first, WHITE);
     DrawTriangle(playerPaddle.corners.first.first, playerPaddle.corners.second.first, playerPaddle.corners.second.second, LIGHTGRAY);
+
+    //Draw the ball
+    DrawCircleV(gameBall.position, gameBall.size, WHITE);
 
     //Ball and paddle collision check
     if (gameBall.collidable)
@@ -180,21 +197,26 @@ void Game::GameDraw()
         }
     }
 
-    //Draw the ball
-    DrawCircleV(gameBall.position, gameBall.size, WHITE);
+    EndDrawing();
 }
 
 //END GAME
 void Game::EndGameUpdate()
 {
+    //Check to see if player wants to continue
     if (IsKeyReleased(NEXTKEY))
     {
         MenuInitalisation();
     }
+
     EndGameDraw();
 }
 void Game::EndGameDraw()
 {
+    BeginDrawing();
+
+    ClearBackground(BLACK);
+
     //Draw score
     string s = to_string(score);
     if (score < 10)
@@ -202,6 +224,9 @@ void Game::EndGameDraw()
         s = "0" + s;
     }
     const char* pchar = s.c_str();
+
+    //Creates a grid of the player's score which moves in and out from the center in a sort of
+    //breathing motion
     for (int y = -3; y <= 3; y++)
     {
         for (int x = -2; x <= 2; x++)
@@ -210,6 +235,8 @@ void Game::EndGameDraw()
             DrawText(pchar, (SCREENSIZE / 2 - GOTEXTSIZE / 2) + (GOTEXTSIZE + GOSCORESPACING) * x + cos(angle) * x * GOSCOREMOVEMENTMULTIPLIER, GOTEXTOFFSETY + (GOTEXTSIZE - GOSCORESPACING)* y + sin(angle) * y * GOSCOREMOVEMENTMULTIPLIER, GOTEXTSIZE, DEEPRED);
         }
     }
+    //Display losing text over this grid
     DrawText("YOU LOSE", GOTEXTOFFSETX, GOTEXTOFFSETY, GOTEXTSIZE, RAYWHITE);
 
+    EndDrawing();
 }

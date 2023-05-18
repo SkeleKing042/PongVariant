@@ -4,8 +4,9 @@ using namespace std;
 
 ClickableObject::ClickableObject()
 {
+	rec.width = rec.height = rec.x = rec.y = 0;
 }
-ClickableObject::~ClickableObject(){}
+ClickableObject::~ClickableObject() { }
 
 void ClickableObject::Init(double width, double height, double x, double y)
 {
@@ -17,6 +18,7 @@ void ClickableObject::Init(double width, double height, double x, double y)
 
 bool ClickableObject::Clicked(Vector2 pos)
 {
+	//Check to see if a given position is within the button's rectangle
 	if (rec.x < pos.x && pos.x < rec.width + rec.x && rec.y < pos.y && pos.y < rec.height + rec.y)
 		return true;
 	else

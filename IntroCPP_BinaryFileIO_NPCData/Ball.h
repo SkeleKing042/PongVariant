@@ -10,10 +10,10 @@ class Ball
 public:
 	Vector2 position;
 	Vector2 velocity;
-	double moveDir;
-	double speed;
-	double size;
-	bool collidable;
+	double moveDir = 0;
+	double speed = 0;
+	double size = 0;
+	bool collidable = true;
 
 public:
 	Ball();

@@ -6,10 +6,11 @@
 using namespace std;
 
 Paddle::Paddle()
-{ }
+{
+	angle = distanceFromCenter = rec.x = rec.y = rec.width = rec.height = recCenter.x = recCenter.y = 0;
+}
 
-Paddle::~Paddle()
-{ }
+Paddle::~Paddle() { }
 
 void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, double givenRadius, double givenAngle)
 {

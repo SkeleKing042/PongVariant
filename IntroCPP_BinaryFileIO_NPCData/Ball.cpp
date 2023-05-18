@@ -7,15 +7,16 @@
 using namespace std;
 
 Ball::Ball()
-{ }
-
-Ball::~Ball()
 {
-
+	collidable = true;
+	position.x = position.y = velocity.x = velocity.y = 0;
 }
+
+Ball::~Ball() { }
 
 void Ball::Init(double givenSpeed, double givenSize, double givenDir)
 {
+	// Ball setup
 	collidable = true;
 	speed = givenSpeed;
 	size = givenSize;
