@@ -14,7 +14,7 @@ Ball::~Ball()
 
 }
 
-void Ball::Init(double givenSpeed, double givenSize, double giveDir)
+void Ball::Init(double givenSpeed, double givenSize, double givenDir)
 {
 	collidable = true;
 	speed = givenSpeed;
@@ -31,7 +31,7 @@ void Ball::Init(double givenSpeed, double givenSize, double giveDir)
 		offset *= -1;
 	position.y = SCREENSIZE / 2 + offset;
 
-	UpdateMoveDir(giveDir * DEG2RAD);
+	UpdateMoveDir(givenDir * DEG2RAD);
 }
 
 void Ball::MoveBall()

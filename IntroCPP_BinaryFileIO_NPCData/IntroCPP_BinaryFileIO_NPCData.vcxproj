@@ -169,12 +169,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="ClickableObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Paddle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="ClickableObject.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDefines.h" />
     <ClInclude Include="Paddle.h" />

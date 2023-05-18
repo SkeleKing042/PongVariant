@@ -3,19 +3,33 @@
 #include "GameDefines.h"
 #include "Paddle.h"
 #include "Ball.h"
+#include "ClickableObject.h"
+
 
 using namespace std;
 
 class Game
 {
 public:
-	void Initalisation();
+	Game();
+	void MenuInitalisation();
+	void GameInitalisation();
 	void Update();
-	void Draw();
+private:
+	void MenuStateUpdate();
+	void GameUpdate();
+	void EndGameUpdate();
+
+	void MenuDraw();
+	void GameDraw();
+	void EndGameDraw();
 
 private:
+	ClickableObject startButton;
+	ClickableObject quitButton;
+
 	int deltaFrames;
-	double PaddleRadius;
+	double paddleRadius;
 	
 	Paddle playerPaddle;
 	Ball gameBall;
@@ -30,4 +44,6 @@ private:
 		gameOver
 	};
 	GameState state;
+
+	double angle;
 };
