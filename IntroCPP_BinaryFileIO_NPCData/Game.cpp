@@ -6,6 +6,7 @@
 
 Game::Game()
 {
+    angle = 0;
     MenuInitalisation();
 }
 void Game::MenuInitalisation()
@@ -47,6 +48,12 @@ void Game::Update()
         EndGameUpdate();
         break;
     }
+
+    angle += 0.04;
+    if (angle > PI * 2)
+        angle -= PI * 2;
+    if (angle < 0)
+        angle += PI * 2;
 }
 
 //IN MENUS
@@ -65,11 +72,16 @@ void Game::MenuStateUpdate()
             return;
         }
     }
+    if (IsKeyReleased(STARTINPUT))
+    {
+        GameInitalisation();
+        return;
+    }
     MenuDraw();
 }
 void Game::MenuDraw()
 {
-    DrawText(TITLETEXT, TITLEXPOS, TITLEYPOS, TITLESIZE, NOTEXACTLYBLACK);
+    DrawText(TITLETEXT, TITLEXPOS, TITLEYPOS + sin(angle) * TITLEMOVEMENTSCALE, TITLESIZE, RAYWHITE);
 
     DrawRectangleRec(startButton.rec, RAYWHITE);
     DrawRectangleLinesEx(startButton.rec, 2, GRAY);
@@ -175,12 +187,7 @@ void Game::GameDraw()
 //END GAME
 void Game::EndGameUpdate()
 {
-    angle += 0.04;
-    if (angle > PI * 2)
-        angle -= PI * 2;
-    if (angle < 0)
-        angle += PI * 2;
-    if (IsKeyDown(KEY_ENTER))
+    if (IsKeyReleased(NEXTKEY))
     {
         MenuInitalisation();
     }
@@ -202,8 +209,7 @@ void Game::EndGameDraw()
             DrawText(pchar, (SCREENSIZE / 2 - GOTEXTSIZE / 2) + (GOTEXTSIZE + GOSCORESPACING) * x + cos(angle) * x, GOTEXTOFFSETY + (GOTEXTSIZE - GOSCORESPACING) * y + sin(angle) * y, GOTEXTSIZE, DEEPERRED);
             DrawText(pchar, (SCREENSIZE / 2 - GOTEXTSIZE / 2) + (GOTEXTSIZE + GOSCORESPACING) * x + cos(angle) * x * GOSCOREMOVEMENTMULTIPLIER, GOTEXTOFFSETY + (GOTEXTSIZE - GOSCORESPACING)* y + sin(angle) * y * GOSCOREMOVEMENTMULTIPLIER, GOTEXTSIZE, DEEPRED);
         }
-
     }
-    DrawText("YOU LOSE", GOTEXTOFFSETX, GOTEXTOFFSETY, GOTEXTSIZE, NOTEXACTLYBLACK);
+    DrawText("YOU LOSE", GOTEXTOFFSETX, GOTEXTOFFSETY, GOTEXTSIZE, RAYWHITE);
 
 }
