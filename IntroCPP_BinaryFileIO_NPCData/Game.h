@@ -13,14 +13,18 @@ class Game
 public:
 	Game();
 	void MenuInitalisation();
-	void GameInitalisation();
+	void ModeMenuInitalisation();
+	void GameInitalisation(int mode);
 	void Update();
 private:
 	void MenuStateUpdate();
+	void MainMenuUpdate();
+	void ModeSelectMenuUpdate();
 	void GameUpdate();
 	void EndGameUpdate();
 
-	void MenuDraw();
+	void MainMenuDraw();
+	void ModeSelectMenuDraw();
 	void GameDraw();
 	void EndGameDraw();
 
@@ -28,13 +32,21 @@ private:
 	ClickableObject startButton;
 	ClickableObject quitButton;
 
+	ClickableObject modeButtons[MODEMENUEXTRAMODES];
+	const char* modeNames[MODEMENUNAMES] = { "STANDARD", "SMALL", "RING", "CHAOS", "MIRROR"};
+	int modeNameCount = MODEMENUNAMES;
+
 	int deltaFrames = 0;
 	double angle = 0;
 	double scalesSaved[5] = { TIER1, TIER2, TIER3, TIER4, TIER5 };
 	double* scalePointer = 0;
 	
-	Paddle playerPaddle;
-	Ball gameBall;
+	Paddle playerPaddle[255];
+	int activePaddleCount = 0;
+	Ball gameBall[255];
+	int activeBallCount = 0;
+	bool randomBallSpeed = false;
+
 
 	int score = 0;
 	//bool gameOver = false;
@@ -46,5 +58,6 @@ private:
 		gameOver
 	};
 	GameState state;
+	int menuState = 0;
 
 };

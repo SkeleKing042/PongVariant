@@ -23,4 +23,5 @@ public:
 
 	void MoveBall(double scale);
 	void UpdateMoveDir(double newAngle);
+	void Draw();
 };

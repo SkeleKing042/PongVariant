@@ -26,11 +26,11 @@ void Ball::Init(double givenSpeed, double givenSize, double givenDir)
 	int offset = rand() % (int)round(SCREENSIZE * STARTINGOFFSETSCALAR);
 	if (offset % 2 == 0)
 		offset *= -1;
-	position.x = SCREENSIZE / 2 + offset;
+	position.x = (float)SCREENSIZE / 2 + (float)offset;
 	offset = rand() % (int)round(SCREENSIZE * STARTINGOFFSETSCALAR);
 	if (offset % 2 == 0)
 		offset *= -1;
-	position.y = SCREENSIZE / 2 + offset;
+	position.y = (float)SCREENSIZE / 2 + (float)offset;
 
 	UpdateMoveDir(givenDir * DEG2RAD);
 }
@@ -38,13 +38,18 @@ void Ball::Init(double givenSpeed, double givenSize, double givenDir)
 void Ball::MoveBall(double s)
 {
 	// Moves the ball based on its momentum
-	position.x += velocity.x * speed * s;
-	position.y += velocity.y * speed * s;		
+	position.x += velocity.x * (float)speed * (float)s;
+	position.y += velocity.y * (float)speed * (float)s;
 }
 void Ball::UpdateMoveDir(double newAngle)
 {
 	//Set the movement direction to the given angle and update the velocity of the ball
 	moveDir = newAngle;
-	velocity.x = cos(moveDir);
-	velocity.y = sin(moveDir);
+	velocity.x = (float)cos(moveDir);
+	velocity.y = (float)sin(moveDir);
+}
+
+void Ball::Draw()
+{
+	DrawCircleV(position, (float)size, BALLCOLOUR);
 }
