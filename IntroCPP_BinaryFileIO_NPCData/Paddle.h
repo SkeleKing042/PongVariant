@@ -3,21 +3,19 @@
 #include "raylib.h"
 #include <vector>
 
-using namespace std;
-
 class Paddle
 {
 	//Every var can have a second var used for modifiers to the first
 public:
 	//[0] = angle value
 	//[1] = offset
-	double angle[2] = {0, 0};
-	double speed = 1.0;
-	Rectangle rec;
-	Vector2 recCenter;
-	Vector2 position;
-	double distanceFromCenter;
-	pair<pair<Vector2, Vector2>, pair<Vector2, Vector2>> corners;
+	double _angle[2] = {0, 0};
+	double _speed = 1.0;
+	Rectangle _rec;
+	Vector2 _recCenter;
+	Vector2 _position;
+	double _distanceFromCenter;
+	std::pair<std::pair<Vector2, Vector2>, std::pair<Vector2, Vector2>> _corners;
 
 public:
 	Paddle();

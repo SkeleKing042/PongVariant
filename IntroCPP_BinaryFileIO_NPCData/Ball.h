@@ -3,17 +3,15 @@
 #include "raylib.h"
 #include <vector>
 
-using namespace std;
-
 class Ball
 {
 public:
-	Vector2 position;
-	Vector2 velocity;
-	double moveDir = 0;
-	double speed = 0;
-	double size = 0;
-	bool collidable = true;
+	Vector2 _position;
+	Vector2 _velocity;
+	double _moveDir = 0;
+	double _speed = 0;
+	double _size = 0;
+	bool _collidable = true;
 
 public:
 	Ball();

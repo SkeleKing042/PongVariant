@@ -3,14 +3,13 @@
 #include "GameDefines.h"
 #include "raylib.h"
 
-using namespace std;
 
 class ClickableObject
 {
 public:
-	Rectangle rec;
-	const char* name = "";
-	int nameLength = 0;
+	Rectangle _rec;
+	const char* _name = "";
+	int _nameLength = 0;
 
 public:
 	ClickableObject();

@@ -1,28 +1,24 @@
 #include "Paddle.h"
-#include "raylib.h"
 #include "GameDefines.h"
-#include <iostream>
-
-using namespace std;
 
 Paddle::Paddle()
 {
-	angle[0] = distanceFromCenter = rec.x = rec.y = rec.width = rec.height = recCenter.x = recCenter.y = 0;
+	_angle[0] = _distanceFromCenter = _rec.x = _rec.y = _rec.width = _rec.height = _recCenter.x = _recCenter.y = 0;
 }
 
 Paddle::~Paddle() { }
 
 void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, double givenRadius, double givenAngle)
 {
-	speed = givenSpeed;
-	angle[0] = givenAngle * DEG2RAD;
-	rec.width = givenWidth;
-	rec.height = givenHeight;
-	distanceFromCenter = givenRadius;
-	rec.x = GetScreenWidth() / 2.0 + cos(angle[0]) * distanceFromCenter;
-	rec.y = GetScreenHeight() / 2.0 + sin(angle[0]) * distanceFromCenter;
-	recCenter.x = rec.width / 2;
-	recCenter.y = rec.height / 2;
+	_speed = givenSpeed;
+	_angle[0] = givenAngle * DEG2RAD;
+	_rec.width = givenWidth;
+	_rec.height = givenHeight;
+	_distanceFromCenter = givenRadius;
+	_rec.x = GetScreenWidth() / 2.0 + cos(_angle[0]) * _distanceFromCenter;
+	_rec.y = GetScreenHeight() / 2.0 + sin(_angle[0]) * _distanceFromCenter;
+	_recCenter.x = _rec.width / 2;
+	_recCenter.y = _rec.height / 2;
 
 	SetCorners();
 }
@@ -37,24 +33,24 @@ void Paddle::MovePaddle(int inputDir, double s)
 	switch (inputDir)
 	{
 	case 0:
-		angle[0] -= speed * s * speedModifier;
+		_angle[0] -= _speed * s * speedModifier;
 		break;
 	case 1:
-		angle[0] += speed * s * speedModifier;
+		_angle[0] += _speed * s * speedModifier;
 		break;
 	}
 
 	//Update positions
-	rec.x = GetScreenWidth() / 2.0 + cos(angle[0] + angle[1]) * distanceFromCenter;
-	rec.y = GetScreenHeight() / 2.0 + sin(angle[0] + angle[1]) * distanceFromCenter;
+	_rec.x = GetScreenWidth() / 2.0 + cos(_angle[0] + _angle[1]) * _distanceFromCenter;
+	_rec.y = GetScreenHeight() / 2.0 + sin(_angle[0] + _angle[1]) * _distanceFromCenter;
 
 	SetCorners();
 
 	//Resets player angle if angle is too high or low
-	if (angle[0] > PI * 2)
-		angle[0] -= PI * 2;
-	if (angle[0] < 0)
-		angle[0] += PI * 2;
+	if (_angle[0] > PI * 2)
+		_angle[0] -= PI * 2;
+	if (_angle[0] < 0)
+		_angle[0] += PI * 2;
 }
 
 /// <summary>
@@ -63,8 +59,8 @@ void Paddle::MovePaddle(int inputDir, double s)
 /// </summary>
 void Paddle::SetCorners()
 {
-	position.x = SCREENSIZE / 2 + cos(angle[0] + angle[1]) * distanceFromCenter;
-	position.y = SCREENSIZE / 2 + sin(angle[0] + angle[1]) * distanceFromCenter;
+	_position.x = SCREENSIZE / 2 + cos(_angle[0] + _angle[1]) * _distanceFromCenter;
+	_position.y = SCREENSIZE / 2 + sin(_angle[0] + _angle[1]) * _distanceFromCenter;
 
 	//The format for the corners is as follows:
 	//- corners.first == front
@@ -74,22 +70,22 @@ void Paddle::SetCorners()
 
 	//The position of each corner takes the center of the paddle, then finds the position offset by
 	//size and current angle of the player paddle.
-	corners.first.first.x = position.x - rec.height / 2 * sin(angle[0] + angle[1]) - rec.width / 2 * cos(angle[0] + angle[1]);
-	corners.first.first.y = position.y + rec.height / 2 * cos(angle[0] + angle[1]) - rec.width / 2 * sin(angle[0] + angle[1]);
+	_corners.first.first.x = _position.x - _rec.height / 2 * sin(_angle[0] + _angle[1]) - _rec.width / 2 * cos(_angle[0] + _angle[1]);
+	_corners.first.first.y = _position.y + _rec.height / 2 * cos(_angle[0] + _angle[1]) - _rec.width / 2 * sin(_angle[0] + _angle[1]);
 
-	corners.first.second.x = position.x + rec.height / 2 * sin(angle[0] + angle[1]) - rec.width / 2 * cos(angle[0] + angle[1]);
-	corners.first.second.y = position.y - rec.height / 2 * cos(angle[0] + angle[1]) - rec.width / 2 * sin(angle[0] + angle[1]);
+	_corners.first.second.x = _position.x + _rec.height / 2 * sin(_angle[0] + _angle[1]) - _rec.width / 2 * cos(_angle[0] + _angle[1]);
+	_corners.first.second.y = _position.y - _rec.height / 2 * cos(_angle[0] + _angle[1]) - _rec.width / 2 * sin(_angle[0] + _angle[1]);
 
-	corners.second.first.x = position.x - rec.height / 2 * sin(angle[0] + angle[1]) + rec.width / 2 * cos(angle[0] + angle[1]);
-	corners.second.first.y = position.y + rec.height / 2 * cos(angle[0] + angle[1]) + rec.width / 2 * sin(angle[0] + angle[1]);
+	_corners.second.first.x = _position.x - _rec.height / 2 * sin(_angle[0] + _angle[1]) + _rec.width / 2 * cos(_angle[0] + _angle[1]);
+	_corners.second.first.y = _position.y + _rec.height / 2 * cos(_angle[0] + _angle[1]) + _rec.width / 2 * sin(_angle[0] + _angle[1]);
 
-	corners.second.second.x = position.x + rec.height / 2 * sin(angle[0] + angle[1]) + rec.width / 2 * cos(angle[0] + angle[1]);
-	corners.second.second.y = position.y - rec.height / 2 * cos(angle[0] + angle[1]) + rec.width / 2 * sin(angle[0] + angle[1]);
+	_corners.second.second.x = _position.x + _rec.height / 2 * sin(_angle[0] + _angle[1]) + _rec.width / 2 * cos(_angle[0] + _angle[1]);
+	_corners.second.second.y = _position.y - _rec.height / 2 * cos(_angle[0] + _angle[1]) + _rec.width / 2 * sin(_angle[0] + _angle[1]);
 }
 
 void Paddle::Draw()
 {
-	DrawTriangle(corners.second.second, corners.first.second, corners.first.first, PLAYERCOLOURA);
-	DrawTriangle(corners.first.first, corners.second.first, corners.second.second, PLAYERCOLOURB);
+	DrawTriangle(_corners.second.second, _corners.first.second, _corners.first.first, PLAYERCOLOURA);
+	DrawTriangle(_corners.first.first, _corners.second.first, _corners.second.second, PLAYERCOLOURB);
 
 }

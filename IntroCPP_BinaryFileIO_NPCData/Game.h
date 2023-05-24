@@ -4,9 +4,8 @@
 #include "Paddle.h"
 #include "Ball.h"
 #include "ClickableObject.h"
-
-
-using namespace std;
+#include "PowerUp.h"
+#include <iostream>
 
 class Game
 {
@@ -29,27 +28,37 @@ private:
 	void EndGameDraw();
 
 private:
-	ClickableObject startButton;
-	ClickableObject quitButton;
+	//Buttons
+	ClickableObject _startButton;
+	ClickableObject _quitButton;
+	ClickableObject _modeButtons[MODEMENUEXTRAMODES];
+	const char* _modeNames[MODEMENUNAMES] = { "STANDARD", "SMALL", "RING", "CHAOS", "MIRROR", "POWER"};
+	int _modeNameCount = MODEMENUNAMES;
+	ClickableObject _returnButton;
 
-	ClickableObject modeButtons[MODEMENUEXTRAMODES];
-	const char* modeNames[MODEMENUNAMES] = { "STANDARD", "SMALL", "RING", "CHAOS", "MIRROR"};
-	int modeNameCount = MODEMENUNAMES;
-
-	int deltaFrames = 0;
-	double angle = 0;
-	double scalesSaved[5] = { TIER1, TIER2, TIER3, TIER4, TIER5 };
-	double* scalePointer = 0;
+	//Numbers for maths or timing
+	int _deltaFrames = 0;
+	double _angle = 0;
+	double _scalesSaved[5] = { TIER1, TIER2, TIER3, TIER4, TIER5 };
+	double* _scalePointer = 0;
 	
-	Paddle playerPaddle[255];
-	int activePaddleCount = 0;
-	Ball gameBall[255];
-	int activeBallCount = 0;
-	bool randomBallSpeed = false;
+	//Paddles
+	Paddle _playerPaddle[255];
+	int _activePaddleCount = 0;
+	//Balls
+	Ball _gameBall[255];
+	int _activeBallCount = 0;
+	bool _randomBallSpeed = false;
+
+	//Power Ups
+	PowerUp* _setPower;
+	bool _spawnPowerUps = false;
+	double _powerUpSpawnTime = 5;
+	double _powerUpSpawnCountdown = _powerUpSpawnTime;
 
 
-	int score = 0;
-	//bool gameOver = false;
+	int _score = 0;
+	double _timeScale = 1;
 
 	enum GameState
 	{
@@ -57,7 +66,7 @@ private:
 		playing,
 		gameOver
 	};
-	GameState state;
-	int menuState = 0;
+	GameState _state;
+	int _menuState = 0;
 
 };
