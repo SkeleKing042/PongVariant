@@ -13,6 +13,7 @@ public:
 	double _speed = 0;
 	double _size = 0;
 	bool _collidable = true;
+	Color _color;
 public:
 	/// <summary>
 /// Ball contructor
@@ -28,7 +29,8 @@ public:
 /// <param name="Given Speed"></param>
 /// <param name="Given Size"></param>
 /// <param name="Given Direction"></param>
-	void Init(double GivenSpeed, double GivenSize, double GivenDirection);
+/// <param name="Given Color"></param>
+	void Init(double GivenSpeed, double GivenSize, double GivenDirection, Color GivenColor);
 	/// <summary>
 /// Moves the ball based on its momentum
 /// </summary>

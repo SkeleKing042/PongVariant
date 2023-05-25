@@ -16,8 +16,8 @@ void Game::MenuInitalisation()
     _activePaddleCount = 0;
     _activeBallCount = 0;
     //Load menu buttons
-    _startButton.Init(BUTTONWIDTH, BUTTONHEIGHT, STARTBUTTONX, STARTBUTTONY, STARTBUTTONTEXT);
-    _quitButton.Init(BUTTONWIDTH, BUTTONHEIGHT, QUITBUTTONX, QUITBUTTONY, QUITBUTTONTEXT);
+    _startButton.Init(BUTTONWIDTH, BUTTONHEIGHT, STARTBUTTONX, STARTBUTTONY, STARTBUTTONTEXT, RAYWHITE, GRAY, BLACK);
+    _quitButton.Init(BUTTONWIDTH, BUTTONHEIGHT, QUITBUTTONX, QUITBUTTONY, QUITBUTTONTEXT, RAYWHITE, GRAY, BLACK);
 }
 void Game::ModeMenuInitalisation()
 {
@@ -47,7 +47,7 @@ void Game::ModeMenuInitalisation()
             _modeButtons[y *MODEMENUBUTTONSPERROW + x]._nameLength = strlen(_modeButtons[y *MODEMENUBUTTONSPERROW + x]._name);
         }
     //Add a return button
-    _returnButton.Init(BUTTONWIDTH, BUTTONHEIGHT, SCREENSIZE - BUTTONWIDTH - BUTTONSPACING, SCREENSIZE - BUTTONHEIGHT - BUTTONSPACING, "RETURN");
+    _returnButton.Init(BUTTONWIDTH, BUTTONHEIGHT, SCREENSIZE - BUTTONWIDTH - BUTTONSPACING, SCREENSIZE - BUTTONHEIGHT - BUTTONSPACING, "RETURN", RAYWHITE, GRAY, BLACK);
 }
 void Game::GameInitalisation(int mode)
 {
@@ -58,9 +58,9 @@ void Game::GameInitalisation(int mode)
 
     //Ball and Paddle setup with a random angle
     double random = rand() % MAXRANDOMSTARTPOSTION;
-    _playerPaddle[0].Init(PADDLESPEED, PADDLEWIDTH, PADDLEHEIGHT, SCREENSIZE / 2 - PADDLEPOSOFFSET, random);
+    _playerPaddle[0].Init(PADDLESPEED, PADDLEWIDTH, PADDLEHEIGHT, SCREENSIZE / 2 - PADDLEPOSOFFSET, random, PLAYERCOLOURA, PLAYERCOLOURB);
     _paddlePtr = _playerPaddle;
-    _gameBall[0].Init(INITIALBALLSPEED, BALLSIZE, random);
+    _gameBall[0].Init(INITIALBALLSPEED, BALLSIZE, random, RAYWHITE);
 
     //Checking the selected gamemode
     switch (mode)
@@ -77,7 +77,7 @@ void Game::GameInitalisation(int mode)
         //Due to a collision bug, it is possible to lose this mode
         for (int i = 1; i < 20; i++)
         {
-            _playerPaddle[i].Init(_playerPaddle[0]._speed, _playerPaddle[0]._rec.width, _playerPaddle[0]._rec.height, _playerPaddle[0]._distanceFromCenter, random);
+            _playerPaddle[i].Init(_playerPaddle[0]._speed, _playerPaddle[0]._rec.width, _playerPaddle[0]._rec.height, _playerPaddle[0]._distanceFromCenter, random, PLAYERCOLOURA, PLAYERCOLOURB);
             _playerPaddle[i]._angle[1] = (18 * i) * DEG2RAD;
             _playerPaddle[i].SetCorners();
             _activePaddleCount++;
@@ -89,7 +89,7 @@ void Game::GameInitalisation(int mode)
         break;
     case 4:
         //Creates another paddle opposite the player
-        _playerPaddle[1].Init(_playerPaddle[0]._speed, _playerPaddle[0]._rec.width, _playerPaddle[0]._rec.height, _playerPaddle[0]._distanceFromCenter, random);
+        _playerPaddle[1].Init(_playerPaddle[0]._speed, _playerPaddle[0]._rec.width, _playerPaddle[0]._rec.height, _playerPaddle[0]._distanceFromCenter, random, PLAYERCOLOURA, PLAYERCOLOURB);
         //Offsets the paddle to be 180^ around the angle point and therefore, opposite the player
         _playerPaddle[1]._angle[1] = 180 * DEG2RAD;
         _playerPaddle[1].SetCorners();
@@ -98,8 +98,8 @@ void Game::GameInitalisation(int mode)
     case 5:
         //Spawns power ups in game
         _spawnPowerUps = true;
-        _setPower = new PowerUp{};
-        _boosterPoint = new ExtraPoint{ &_score };
+        _setPower = new PowerUp{ RAYWHITE };
+        _boosterPoint = new ExtraPoint{0, &_score, ORANGE };
         break;
     }
 
@@ -376,15 +376,15 @@ void Game::GameUpdate()
                 switch (r)
                 {
                 case 0:
-                    _setPower = new ExtraPoint{ &_score };
+                    _setPower = new ExtraPoint{2, &_score, ORANGE };
                     _setPower->_active = true;
                     break;
                 case 1:
-                    _setPower = new TimeSlow{ &_timeScale };
+                    _setPower = new TimeSlow{ &_timeScale, SKYBLUE };
                     _setPower->_active = true;
                     break;
                 case 2:
-                    _setPower = new DoubleUp{ &_activePaddleCount, _paddlePtr };
+                    _setPower = new DoubleUp{ &_activePaddleCount, _paddlePtr, RED };
                     _setPower->_active = true;
                 default:
                     break;
@@ -395,7 +395,7 @@ void Game::GameUpdate()
             //If there is an active power up, spawn an extra point power up
             else if (!_boosterPoint->_active && _setPower->_counting)
             {
-                _boosterPoint = new ExtraPoint{ &_score };
+                _boosterPoint = new ExtraPoint{1, &_score, ORANGE };
                 _boosterPoint->_active = true;
             }
         }

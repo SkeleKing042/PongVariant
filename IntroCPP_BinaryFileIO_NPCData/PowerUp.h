@@ -14,17 +14,20 @@ public:
 	double _powerTimer = 0;
 	bool _counting = false;
 	bool _doDrawVisuals = false;
+	Color _color;
 
 public:
 	/// <summary>
 /// Power up contructor with a random position
+/// <param name="Color"></param>
 /// </summary>
-	PowerUp();
+	PowerUp(Color Color);
 	/// <summary>
 /// Power up contructor with a given position
 /// </summary>
-/// <param name="p"></param>
-	PowerUp(Vector2 Position);
+/// <param name="Color"></param>
+/// <param name="Position"></param>
+	PowerUp(Color Color, Vector2 Position);
 	/// <summary>
 /// Power up destructor
 /// </summary>
@@ -57,11 +60,15 @@ public:
 class ExtraPoint : public PowerUp
 {
 public:
+	int _value;
+public:
 	/// <summary>
 	/// Extra point constructor
 	/// </summary>
+	/// <param name="Value"></param>
 	/// <param name="Score"></param>
-	ExtraPoint(int* Score);
+	///	<param name="Color"></param>
+	ExtraPoint(int GivenValue, int* Score, Color Color);
 	/// <summary>
 /// Grants an extra point
 /// </summary>
@@ -88,7 +95,8 @@ public:
 	/// Time slow power up contructor
 	/// </summary>
 	/// <param name="Time Scale"></param>
-	TimeSlow(double* TimeScale);
+	///	<param name="Color"></param>
+	TimeSlow(double* TimeScale, Color Color);
 	/// <summary>
 	/// Slows time down
 	/// </summary>
@@ -119,7 +127,8 @@ public:
 	/// </summary>
 	/// <param name="Counter"></param>
 	/// <param name="List"></param>
-	DoubleUp(int* Counter, Paddle* List);
+	/// <param name="Color"></param>
+	DoubleUp(int* Counter, Paddle* List, Color Color);
 	/// <summary>
 	/// Adds the second paddle
 	/// </summary>

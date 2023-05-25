@@ -1,6 +1,6 @@
 #include "PowerUp.h"
 #include <iostream>
-PowerUp::PowerUp()
+PowerUp::PowerUp(Color cl)
 {
 	//Generates a random int based off the screen size and use it to give the power up a random spawn
 	//point each time
@@ -12,10 +12,13 @@ PowerUp::PowerUp()
 	if (offset % 2 == 0)
 		offset *= -1;
 	_position.y = (float)SCREENSIZE / 2 + (float)offset;
+
+	_color = cl;
 }
-PowerUp::PowerUp(Vector2 p)
+PowerUp::PowerUp(Color cl, Vector2 ps)
 {
-	_position = p;
+	_color = cl;
+	_position = ps;
 }
 PowerUp::~PowerUp()
 { }

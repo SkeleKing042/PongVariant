@@ -8,6 +8,9 @@ class ClickableObject
 {
 public:
 	Rectangle _rec;
+	Color _baseColor;
+	Color _outLineColor;
+	Color _textColor;
 	const char* _name = "";
 	int _nameLength = 0;
 public:
@@ -27,7 +30,10 @@ public:
 /// <param name="X Position"></param>
 /// <param name="Y Position"></param>
 /// <param name="Name"></param>
-	void Init(double Width, double Height, double xPostion, double yPosition, const char* Name);
+/// 	<param name="Base Color"></param>
+/// 	<param name="Outline Color"></param>
+/// 	<param name="Text Color"></param>
+	void Init(double Width, double Height, double xPostion, double yPosition, const char* Name, Color BaseColor, Color OutlineColor, Color TextColor);
 	/// <summary>
 /// Checks if it has been clicked
 /// <para/>"pos" is the mouse position

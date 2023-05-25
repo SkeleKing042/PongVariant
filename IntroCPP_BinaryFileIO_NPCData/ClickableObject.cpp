@@ -1,26 +1,15 @@
 #include "ClickableObject.h"
 #include <sstream>
-/// <summary>
-/// Clickable Object contructor
-/// </summary>
 ClickableObject::ClickableObject()
 {
 	//Creates a default rec to avoid errors for undifined rec values
 	_rec.width = _rec.height = _rec.x = _rec.y = 0;
+	_baseColor = RAYWHITE;
+	_outLineColor = GRAY;
+	_textColor = BLACK;
 }
-/// <summary>
-/// Clickable Object destructor
-/// </summary>
 ClickableObject::~ClickableObject() { }
-/// <summary>
-/// Clickable object initialisation
-/// </summary>
-/// <param name="Width"></param>
-/// <param name="Height"></param>
-/// <param name="X Position"></param>
-/// <param name="Y Position"></param>
-/// <param name="Name"></param>
-void ClickableObject::Init(double width, double height, double x, double y, const char* name)
+void ClickableObject::Init(double width, double height, double x, double y, const char* name, Color bc, Color oc, Color tc)
 {
 	_rec.width = width;
 	_rec.height = height;
@@ -29,13 +18,10 @@ void ClickableObject::Init(double width, double height, double x, double y, cons
 	this->_name = name;
 	//Name length is needed for text positioning
 	_nameLength = strlen(name);
+	_baseColor = bc;
+	_outLineColor = oc;
+	_textColor = tc;
 }
-/// <summary>
-/// Checks if it has been clicked
-/// <para/>"pos" is the mouse position
-/// </summary>
-/// <param name="Mouse Poition"></param>
-/// <returns></returns>
 bool ClickableObject::Clicked(Vector2 pos)
 {
 	//Check to see if the given position is within the button's rectangle
@@ -44,12 +30,9 @@ bool ClickableObject::Clicked(Vector2 pos)
 	else
 		return false;
 }
-/// <summary>
-/// Draws this Clickable Object
-/// </summary>
 void ClickableObject::Draw()
 {
-	DrawRectangleRec(_rec, RAYWHITE);
-	DrawRectangleLinesEx(_rec, 2, GRAY);
-	DrawText(_name, _rec.x + _rec.width / 2 - (_nameLength + 1.0) / 2.0 * (MENUTEXTSIZE / 2), _rec.y + _rec.height / 2.0 - MENUTEXTSIZE / 2.0, MENUTEXTSIZE, BLACK);
+	DrawRectangleRec(_rec, _baseColor);
+	DrawRectangleLinesEx(_rec, 2, _outLineColor);
+	DrawText(_name, _rec.x + _rec.width / 2 - (_nameLength + 1.0) / 2.0 * (MENUTEXTSIZE / 2), _rec.y + _rec.height / 2.0 - MENUTEXTSIZE / 2.0, MENUTEXTSIZE, _textColor);
 }

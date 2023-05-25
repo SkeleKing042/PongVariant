@@ -70,7 +70,7 @@
 //----------------------------------//
 
 #define MAXRANDOMSTARTPOSTION		360
-#define RANDOMANGLEADDITION			21
+#define RANDOMANGLEADDITION			3
 
 
 //----------------------------------//

@@ -6,7 +6,7 @@ Paddle::Paddle()
 }
 Paddle::~Paddle()
 { }
-void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, double givenRadius, double givenAngle)
+void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, double givenRadius, double givenAngle, Color fc, Color sc)
 {
 	_speed = givenSpeed;
 	_angle[0] = givenAngle * DEG2RAD;
@@ -17,6 +17,8 @@ void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, doub
 	_rec.y = GetScreenHeight() / 2.0 + sin(_angle[0]) * _distanceFromCenter;
 	_recCenter.x = _rec.width / 2;
 	_recCenter.y = _rec.height / 2;
+	_firstColor = fc;
+	_secondColor = sc;
 
 	SetCorners();
 }
@@ -78,6 +80,6 @@ void Paddle::SetCorners()
 }
 void Paddle::Draw()
 {
-	DrawTriangle(_corners.second.second, _corners.first.second, _corners.first.first, PLAYERCOLOURA);
-	DrawTriangle(_corners.first.first, _corners.second.first, _corners.second.second, PLAYERCOLOURB);
+	DrawTriangle(_corners.second.second, _corners.first.second, _corners.first.first, _firstColor);
+	DrawTriangle(_corners.first.first, _corners.second.first, _corners.second.second, _secondColor);
 }
