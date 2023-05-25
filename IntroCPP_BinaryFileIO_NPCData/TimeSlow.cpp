@@ -1,18 +1,20 @@
 #include "PowerUp.h"
 
-TimeSlow::TimeSlow(double* s, Vector2 p) : PowerUp(p)
+TimeSlow::TimeSlow(double* s)
 { 
 	_timeScale = s;
-	_powerTimeLimit = 5;
+	_powerTimeLimit = 8.0;
 }
 
 void TimeSlow::DoEffect()
 {
+	_counting = true;
 	*_timeScale *= 0.5;
 }
 
 void TimeSlow::UndoEffect()
 {
+	_counting = false;
 	*_timeScale = 1;
 }
 

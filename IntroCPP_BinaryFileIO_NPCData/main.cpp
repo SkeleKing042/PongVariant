@@ -18,11 +18,9 @@
 *   Copyright (c) 2014 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
-
 #include "raylib.h"
 #include "GameDefines.h"
 #include "Game.h"
-
 int main(int argc, char* argv[])
 {
     //Initialization

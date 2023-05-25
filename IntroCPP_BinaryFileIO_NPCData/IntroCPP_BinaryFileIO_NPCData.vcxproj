@@ -170,6 +170,7 @@
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="ClickableObject.cpp" />
+    <ClCompile Include="DoubleUp.cpp" />
     <ClCompile Include="ExtraPoint.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />

@@ -1,18 +1,23 @@
 #include "Ball.h"
-#include "raylib.h"
-#include <iostream>
-#include <conio.h>
-#include <dos.h>
 #include "GameDefines.h"
-
+/// <summary>
+/// Ball contructor
+/// </summary>
 Ball::Ball()
 {
 	_collidable = true;
 	_position.x = _position.y = _velocity.x = _velocity.y = 0;
 }
-
+/// <summary>
+/// Ball destructor
+/// </summary>
 Ball::~Ball() { }
-
+/// <summary>
+/// Ball initalisation
+/// </summary>
+/// <param name="Given Speed"></param>
+/// <param name="Given Size"></param>
+/// <param name="Given Direction"></param>
 void Ball::Init(double givenSpeed, double givenSize, double givenDir)
 {
 	// Ball setup
@@ -33,21 +38,28 @@ void Ball::Init(double givenSpeed, double givenSize, double givenDir)
 
 	UpdateMoveDir(givenDir * DEG2RAD);
 }
-
+/// <summary>
+/// Moves the ball based on its momentum
+/// </summary>
+/// <param name="Scale"></param>
 void Ball::MoveBall(double s)
 {
-	// Moves the ball based on its momentum
 	_position.x += _velocity.x * (float)_speed * (float)s;
 	_position.y += _velocity.y * (float)_speed * (float)s;
 }
+/// <summary>
+///Set the movement direction to the given angle and update the velocity of the ball
+/// </summary>
+/// <param name="New Angle"></param>
 void Ball::UpdateMoveDir(double newAngle)
 {
-	//Set the movement direction to the given angle and update the velocity of the ball
 	_moveDir = newAngle;
 	_velocity.x = (float)cos(_moveDir);
 	_velocity.y = (float)sin(_moveDir);
 }
-
+/// <summary>
+/// Draws the ball
+/// </summary>
 void Ball::Draw()
 {
 	DrawCircleV(_position, (float)_size, BALLCOLOUR);

@@ -1,9 +1,7 @@
 #include "Game.h"
 #include "raylib.h"
 #include <sstream>
-
 #include <iostream>
-
 Game::Game()
 {
     _scalePointer = &_scalesSaved[0];
@@ -12,60 +10,71 @@ Game::Game()
 }
 void Game::MenuInitalisation()
 {
+    //Set the menu state and reset all values
     _state = startMenu;
     _menuState = 0;
     _activePaddleCount = 0;
     _activeBallCount = 0;
-    // LOAD BUTTONS
+    //Load menu buttons
     _startButton.Init(BUTTONWIDTH, BUTTONHEIGHT, STARTBUTTONX, STARTBUTTONY, STARTBUTTONTEXT);
     _quitButton.Init(BUTTONWIDTH, BUTTONHEIGHT, QUITBUTTONX, QUITBUTTONY, QUITBUTTONTEXT);
 }
 void Game::ModeMenuInitalisation()
 {
+    //Updates the menu state
     _menuState = 1;
 
     //Loading Buttons
+    //Mode buttons are arranged in a grid
+    //Y is each row and X is each column
     for(int y = 0; y < (double)MODEMENUEXTRAMODES / (double)MODEMENUBUTTONSPERROW; y++)
-        for (int x = 0; x <MODEMENUBUTTONSPERROW; x++)
+        for (int x = 0; x < MODEMENUBUTTONSPERROW; x++)
         {
+            //If enough buttons have been put in this row, break
             if (y * MODEMENUBUTTONSPERROW + x >= MODEMENUEXTRAMODES)
                 break;
+            //Setup a button with the correct size and position to fit in the grid
             _modeButtons[y * MODEMENUBUTTONSPERROW + x]._rec.width = (MODEMENUSIDESPACING - ((MODEMENUBUTTONSPERROW - 1.0) * BUTTONSPACING)) / (double)MODEMENUBUTTONSPERROW;
             _modeButtons[y *MODEMENUBUTTONSPERROW + x]._rec.height = MODEMENUBUTTONHEIGHT;
             _modeButtons[y *MODEMENUBUTTONSPERROW + x]._rec.x = MODEMENUBUTTONXOFFSET + x * (_modeButtons[y * MODEMENUBUTTONSPERROW + x]._rec.width + MODEMENUBUTTONSPACING);
             _modeButtons[y *MODEMENUBUTTONSPERROW + x]._rec.y = MODEMENUBUTTONYOFFSET + y * (_modeButtons[y * MODEMENUBUTTONSPERROW + x]._rec.height + MODEMENUBUTTONSPACING);
+            //If there is no avalible name for the button's mode, use "TBD
             if (y *MODEMENUBUTTONSPERROW + x >= _modeNameCount)
                 _modeButtons[y *MODEMENUBUTTONSPERROW + x]._name = "TBD";
             else
                 _modeButtons[y *MODEMENUBUTTONSPERROW + x]._name = _modeNames[y *MODEMENUBUTTONSPERROW + x];
-
+            //Get the lenght of the mode name
             _modeButtons[y *MODEMENUBUTTONSPERROW + x]._nameLength = strlen(_modeButtons[y *MODEMENUBUTTONSPERROW + x]._name);
         }
+    //Add a return button
     _returnButton.Init(BUTTONWIDTH, BUTTONHEIGHT, SCREENSIZE - BUTTONWIDTH - BUTTONSPACING, SCREENSIZE - BUTTONHEIGHT - BUTTONSPACING, "RETURN");
 }
-
 void Game::GameInitalisation(int mode)
 {
     //Scoring and game logic 
     _state = playing;
     _score = 0;
+    _timeScale = 1;
 
-    //Ball and Paddle setup
+    //Ball and Paddle setup with a random angle
     double random = rand() % MAXRANDOMSTARTPOSTION;
     _playerPaddle[0].Init(PADDLESPEED, PADDLEWIDTH, PADDLEHEIGHT, SCREENSIZE / 2 - PADDLEPOSOFFSET, random);
+    _paddlePtr = _playerPaddle;
     _gameBall[0].Init(INITIALBALLSPEED, BALLSIZE, random);
 
+    //Checking the selected gamemode
     switch (mode)
     {
     case 1:
-        //Small objects
+        //Resizes the paddle and ball to half size
         _playerPaddle[0]._rec.width /= 2;
         _playerPaddle[0]._rec.height /= 2;
         _gameBall[0]._size /= 2;
         _playerPaddle[0].SetCorners();
         break;
     case 2:
-        //Ring
+        //Creates a ring of paddles
+        //Due to a collision bug, it is possible to lose this mode
         for (int i = 1; i < 20; i++)
         {
             _playerPaddle[i].Init(_playerPaddle[0]._speed, _playerPaddle[0]._rec.width, _playerPaddle[0]._rec.height, _playerPaddle[0]._distanceFromCenter, random);
@@ -75,30 +84,37 @@ void Game::GameInitalisation(int mode)
         }
         break;
     case 3:
-        //Random ball speed
+        //Enables random ball speeds
         _randomBallSpeed = true;
         break;
     case 4:
-        //Long and close paddles
+        //Creates another paddle opposite the player
         _playerPaddle[1].Init(_playerPaddle[0]._speed, _playerPaddle[0]._rec.width, _playerPaddle[0]._rec.height, _playerPaddle[0]._distanceFromCenter, random);
+        //Offsets the paddle to be 180^ around the angle point and therefore, opposite the player
         _playerPaddle[1]._angle[1] = 180 * DEG2RAD;
         _playerPaddle[1].SetCorners();
         _activePaddleCount+=1;
         break;
     case 5:
-        //PowerUps
+        //Spawns power ups in game
         _spawnPowerUps = true;
         _setPower = new PowerUp{};
+        _boosterPoint = new ExtraPoint{ &_score };
         break;
     }
 
     //Used for seeing the number of frames since a given action
     _deltaFrames = 0;
 }
-
+void Game::LossInitalisation()
+{
+    _state = gameOver;
+    if (_randomBallSpeed) _randomBallSpeed = false;
+    if (_spawnPowerUps) { _spawnPowerUps = false; _setPower = nullptr; _boosterPoint = nullptr; _powerUpSpawnCountdown = _powerUpSpawnTime; }
+}
 void Game::Update()
 {
-    //Check what the game's current state is and calls the approprate update function
+    //Checks the game's current state and calls the approprate update function
     switch (_state)
     {
     case startMenu:
@@ -112,6 +128,7 @@ void Game::Update()
         break;
     }
 
+    //Angle is used for "animation"
     _angle += 0.04;
     //Resets angle when reaching 0 or 360 degrees 
     if (_angle > PI * 2)
@@ -119,8 +136,6 @@ void Game::Update()
     if (_angle < 0)
         _angle += PI * 2;
 }
-
-// IN MENUS //
 void Game::MenuStateUpdate()
 {
     switch (_menuState)
@@ -133,10 +148,9 @@ void Game::MenuStateUpdate()
         break;
     }
 }
-
 void Game::MainMenuUpdate()
 {
-    //Check to see if player presses either button
+    //Check to see if the player presses either button
     //If so, call approprate functions
     if (IsMouseButtonPressed(0))
     {
@@ -151,6 +165,7 @@ void Game::MainMenuUpdate()
             return;
         }
     }
+
     //Player can change the difficulty by pressing 1 - 5
     if (IsKeyPressed(KEY_ONE))
         _scalePointer = &_scalesSaved[0];
@@ -169,6 +184,7 @@ void Game::MainMenuUpdate()
         GameInitalisation(0);
         return;
     }
+
     MainMenuDraw();
 }
 void Game::MainMenuDraw()
@@ -192,6 +208,7 @@ void Game::MainMenuDraw()
     else
         DrawRectangleGradientV(0, 0, SCREENSIZE, SCREENSIZE, BLANK, BLANK);
 
+    //Draws little tabs under the start button as additional speed level indicators
     for (int i = 0; i <= 4; i++)
     {
         if (abs(i < *_scalePointer))
@@ -205,16 +222,18 @@ void Game::MainMenuDraw()
 
     EndDrawing();
 }
-
 void Game::ModeSelectMenuUpdate()
 {
+    //If the player clicks, check if they clicked on a button
     if (IsMouseButtonPressed(0))
     {
         for (int i = 0; i < MODEMENUEXTRAMODES; i++)
             if (_modeButtons[i].Clicked(GetMousePosition()))
             {
+                //Start the game with a unique game mode enabled
                 GameInitalisation(i);
             }
+        //Go back to the main menu if the player clicked the return button
         if (_returnButton.Clicked(GetMousePosition()))
         {
             _menuState = 0;
@@ -231,41 +250,40 @@ void Game::ModeSelectMenuDraw()
 
     DrawText("*- CHOOSE A MODE -*", SCREENSIZE * 0.034, SCREENSIZE * 0.033, SCREENSIZE * 0.0534, WHITE);
 
+    //Draws all the mode buttons
     for (int i = 0; i < MODEMENUEXTRAMODES; i++)
     {
         _modeButtons[i].Draw();
     }
 
+    //Draws the return button
     _returnButton.Draw();
 
     EndDrawing();
 }
-
-// PLAYING GAME
 void Game::GameUpdate()
 {
-
+    //Move all active paddles if the player presses a movement input key
     for (int p = 0; p <= _activePaddleCount; p++)
     {
-        //Player input checks
         if (IsKeyDown(MOVEPADDLERIGHT))
             _playerPaddle[p].MovePaddle(1, *_scalePointer);
         if (IsKeyDown(MOVEPADDLELEFT))
             _playerPaddle[p].MovePaddle(0, *_scalePointer);
     }
 
+    //Update each active ball
     for (int b = 0; b <= _activeBallCount; b++)
     {
         //Moving the ball
         _gameBall[b].MoveBall(*_scalePointer * _timeScale);
 
-        //Close game upon ball hiting wall
+        //Close game upon the ball hiting a wall
         //Scales with ball size
         if (_gameBall[b]._position.x <= 0 + _gameBall[b]._size || _gameBall[b]._position.x >= SCREENSIZE - _gameBall[b]._size || _gameBall[b]._position.y <= 0 + _gameBall[b]._size || _gameBall[b]._position.y >= SCREENSIZE - _gameBall[b]._size)
         {
             _angle = 0;
-            _randomBallSpeed = false;
-            _state = gameOver;
+            LossInitalisation();
             return;
         }
 
@@ -287,8 +305,6 @@ void Game::GameUpdate()
                         else
                             _gameBall[b]._speed = rand() % BALLMAXSPEED;
                     }
-                    //Update the displayed score
-
                     //Get ball movement direction
                     double ballDir = _gameBall[b]._moveDir * RAD2DEG;
                     //Reduce the ball movement angle by the player paddle angle
@@ -322,44 +338,75 @@ void Game::GameUpdate()
             }
         }
 
+        //If power ups are enabled, check if they've been hit
+        //Upon being hit, trigger the power up's effect(s), and disable them
         if (_spawnPowerUps)
         {
             if (_setPower->_active)
+            {
                 if (CheckCollisionCircles(_gameBall[b]._position, _gameBall[b]._size, _setPower->_position, 50))
                 {
-                    _setPower->_active = false;
                     _setPower->DoEffect();
+                    _setPower->_active = false;
                 }
+            }
+            if (_boosterPoint->_active)
+            {
+                if (CheckCollisionCircles(_gameBall[b]._position, _gameBall[b]._size, _boosterPoint->_position, 50))
+                {
+                    _boosterPoint->DoEffect();
+                    _boosterPoint->_active = false;
+                }
+            }
 
         }
     }
 
+    //If power ups are enabled, try to spawn one
     if (_spawnPowerUps)
     {
-        if (!_setPower->_active && _powerUpSpawnCountdown <= 0)
+        //After enough time has passed, try to spawn one
+        if (_powerUpSpawnCountdown <= 0)
         {
-            Vector2 pos;
-            pos.x = pos.y = SCREENSIZE / 2;
-
-            int r = rand() % 2;
-            switch (r)
+            //If there is no power up active, spawn one
+            if (!_setPower->_counting && !_setPower->_active)
             {
-            case 0:
-                _setPower = new ExtraPoint{ &_score, pos };
-                _setPower->_active = true;
-                break;
-            case 1:
-                _setPower = new TimeSlow{ &_timeScale, pos };
-                _setPower->_active = true;
-                break;
-            default:
-                break;
+                //Choose a random power up to spawn
+                int r = rand() % 3;
+                switch (r)
+                {
+                case 0:
+                    _setPower = new ExtraPoint{ &_score };
+                    _setPower->_active = true;
+                    break;
+                case 1:
+                    _setPower = new TimeSlow{ &_timeScale };
+                    _setPower->_active = true;
+                    break;
+                case 2:
+                    _setPower = new DoubleUp{ &_activePaddleCount, _paddlePtr };
+                    _setPower->_active = true;
+                default:
+                    break;
+                }
+                //Start the countdown
+                _powerUpSpawnCountdown = _powerUpSpawnTime;
             }
-            _powerUpSpawnCountdown = _powerUpSpawnTime;
+            //If there is an active power up, spawn an extra point power up
+            else if (!_boosterPoint->_active && _setPower->_counting)
+            {
+                _boosterPoint = new ExtraPoint{ &_score };
+                _boosterPoint->_active = true;
+            }
         }
+        //Continue the spawn countdown
         else if (!_setPower->_active && _powerUpSpawnCountdown > 0)
             _powerUpSpawnCountdown -= 0.0167;
-            }
+
+        //Continue the effect countdown
+        if (_setPower->_counting)
+            _setPower->DoCountDown();
+    }
     GameDraw();
 }
 void Game::GameDraw()
@@ -368,7 +415,7 @@ void Game::GameDraw()
 
     ClearBackground(BLACK);
 
-    //Draw score
+    //Draw the score
     std::string s = std::to_string(_score);
     if (_score < 10)
         s = "0" + s;
@@ -384,17 +431,20 @@ void Game::GameDraw()
     for (int b = 0; b <= _activeBallCount; b++)
         _gameBall[b].Draw();
 
+    //Draw any power ups if there're enabled
     if (_spawnPowerUps)
+    {
         if (_setPower->_active)
             _setPower->DrawObject();
+        if (_boosterPoint->_active)
+            _boosterPoint->DrawObject();
+    }
 
     EndDrawing();
 }
-
-//END GAME
 void Game::EndGameUpdate()
 {
-    //Check to see if player wants to continue
+    //Check to see if player wants to return to the main menu
     if (IsKeyReleased(NEXTKEY) || IsMouseButtonPressed(0))
     {
         MenuInitalisation();

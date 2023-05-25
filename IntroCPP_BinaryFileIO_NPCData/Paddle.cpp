@@ -1,13 +1,11 @@
 #include "Paddle.h"
 #include "GameDefines.h"
-
 Paddle::Paddle()
 {
-	_angle[0] = _distanceFromCenter = _rec.x = _rec.y = _rec.width = _rec.height = _recCenter.x = _recCenter.y = 0;
+	_angle[0] = _distanceFromCenter = _rec.x = _rec.y = _rec.width = _rec.height = _recCenter.x = _recCenter.y = _position.x = _position.y = 0;
 }
-
-Paddle::~Paddle() { }
-
+Paddle::~Paddle()
+{ }
 void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, double givenRadius, double givenAngle)
 {
 	_speed = givenSpeed;
@@ -22,13 +20,13 @@ void Paddle::Init(double givenSpeed, double givenWidth, double givenHeight, doub
 
 	SetCorners();
 }
-
 void Paddle::MovePaddle(int inputDir, double s)
 {
+	//Used to slow down the paddle at fast speeds when needed
 	double speedModifier = 1;
-
 	if (IsKeyDown(KEY_SPACE))
 		speedModifier = 1 / s;
+
 	//Change the paddle angle depending on the player input
 	switch (inputDir)
 	{
@@ -52,13 +50,9 @@ void Paddle::MovePaddle(int inputDir, double s)
 	if (_angle[0] < 0)
 		_angle[0] += PI * 2;
 }
-
-/// <summary>
-/// Finds the corners of the player paddle and saves them to a
-/// pair<pair<Vector2, Vector2>, pair<Vector2, Vector2>> variable
-/// </summary>
 void Paddle::SetCorners()
 {
+	//Gets the center of the paddle
 	_position.x = SCREENSIZE / 2 + cos(_angle[0] + _angle[1]) * _distanceFromCenter;
 	_position.y = SCREENSIZE / 2 + sin(_angle[0] + _angle[1]) * _distanceFromCenter;
 
@@ -82,10 +76,8 @@ void Paddle::SetCorners()
 	_corners.second.second.x = _position.x + _rec.height / 2 * sin(_angle[0] + _angle[1]) + _rec.width / 2 * cos(_angle[0] + _angle[1]);
 	_corners.second.second.y = _position.y - _rec.height / 2 * cos(_angle[0] + _angle[1]) + _rec.width / 2 * sin(_angle[0] + _angle[1]);
 }
-
 void Paddle::Draw()
 {
 	DrawTriangle(_corners.second.second, _corners.first.second, _corners.first.first, PLAYERCOLOURA);
 	DrawTriangle(_corners.first.first, _corners.second.first, _corners.second.second, PLAYERCOLOURB);
-
 }
