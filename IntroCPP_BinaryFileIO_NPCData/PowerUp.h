@@ -13,6 +13,7 @@ public:
 	double _powerTimeLimit = 0;
 	double _powerTimer = 0;
 	bool _counting = false;
+	bool _doDrawVisuals = false;
 
 public:
 	/// <summary>

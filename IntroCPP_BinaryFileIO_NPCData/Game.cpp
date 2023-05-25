@@ -423,6 +423,19 @@ void Game::GameDraw()
     const char* pchar = s.c_str();
     DrawText(pchar, SCORETEXTOFFSETX, SCORETEXTOFFSETY, SCORETEXTSIZE, NOTEXACTLYBLACK);
 
+    //Draw any power ups if there're enabled
+    if (_spawnPowerUps)
+    {
+        if (_setPower->_doDrawVisuals)
+            _setPower->DrawVisuals();
+        if (_boosterPoint->_doDrawVisuals)
+            _boosterPoint->DrawVisuals();
+        if (_setPower->_active)
+            _setPower->DrawObject();
+        if (_boosterPoint->_active)
+            _boosterPoint->DrawObject();
+    }
+
     //Draw player paddles
     for (int p = 0; p <= _activePaddleCount; p++)
         _playerPaddle[p].Draw();
@@ -430,15 +443,6 @@ void Game::GameDraw()
     //Draw the balls
     for (int b = 0; b <= _activeBallCount; b++)
         _gameBall[b].Draw();
-
-    //Draw any power ups if there're enabled
-    if (_spawnPowerUps)
-    {
-        if (_setPower->_active)
-            _setPower->DrawObject();
-        if (_boosterPoint->_active)
-            _boosterPoint->DrawObject();
-    }
 
     EndDrawing();
 }
