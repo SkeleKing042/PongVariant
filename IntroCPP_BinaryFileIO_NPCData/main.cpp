@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     Game mainGame;
 
     //Display window setup
-    InitWindow(SCREENSIZE, SCREENSIZE, "PO");
+    InitWindow(SCREENSIZE, SCREENSIZE, "PO - There is only one");
     SetTargetFPS(FPS);
 
     // Main game loop

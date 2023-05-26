@@ -96,11 +96,11 @@ private:
 	double* _scalePointer = 0;
 	
 	//Paddles
-	Paddle _playerPaddle[20];
+	Paddle _playerPaddle[MAXIMUMPADDLECOUNT];
 	Paddle* _paddlePtr;
 	int _activePaddleCount = 0;
 	//Balls
-	Ball _gameBall[20];
+	Ball _gameBall[MAXIMUMBALLCOUNT];
 	int _activeBallCount = 0;
 	bool _randomBallSpeed = false;
 
@@ -108,7 +108,7 @@ private:
 	PowerUp* _setPower;
 	PowerUp* _boosterPoint;
 	bool _spawnPowerUps = false;
-	double _powerUpSpawnTime = 1;
+	double _powerUpSpawnTime = POWERUPSPAWNTIME;
 	double _powerUpSpawnCountdown = _powerUpSpawnTime;
 
 	//Game Logic

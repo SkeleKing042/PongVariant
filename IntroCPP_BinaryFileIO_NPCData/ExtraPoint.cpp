@@ -1,6 +1,6 @@
 #include "PowerUp.h"
 
-ExtraPoint::ExtraPoint(int vl, int* sc, Color cl) : PowerUp(cl)
+ExtraPoint::ExtraPoint(int vl, int* sc, Color cl, double si) : PowerUp(cl, si)
 {
 	_value = vl;
 	_gameScore = sc;
@@ -20,14 +20,14 @@ void ExtraPoint::DoEffect()
 
 void ExtraPoint::DrawObject()
 {
-	DrawCircleV(_position, 50, _color);
+	DrawCircleV(_position, _size, _color);
 }
 
 void ExtraPoint::DrawVisuals()
 {
 	//Draws a subtle "pop" effect
-	_powerTimer += 0.0167;
-	DrawCircleLines(_position.x, _position.y, 50 + 10 * _powerTimer, _color);
+	_powerTimer += 1.0 / FPS;
+	DrawCircleLines(_position.x, _position.y, _size + 10 * _powerTimer, _color);
 	if (_powerTimer > _powerTimeLimit)
 		_doDrawVisuals = false;
 }

@@ -9,6 +9,7 @@ class PowerUp
 {
 public:
 	Vector2 _position;
+	double _size;
 	bool _active = false;
 	double _powerTimeLimit = 0;
 	double _powerTimer = 0;
@@ -20,14 +21,16 @@ public:
 	/// <summary>
 /// Power up contructor with a random position
 /// <param name="Color"></param>
+/// 	<param name="Size"></param>
 /// </summary>
-	PowerUp(Color Color);
+	PowerUp(Color Color, double Size);
 	/// <summary>
 /// Power up contructor with a given position
 /// </summary>
 /// <param name="Color"></param>
+///	<param name="Size"></param>
 /// <param name="Position"></param>
-	PowerUp(Color Color, Vector2 Position);
+	PowerUp(Color Color, double Size, Vector2 Position);
 	/// <summary>
 /// Power up destructor
 /// </summary>
@@ -64,11 +67,12 @@ public:
 public:
 	/// <summary>
 	/// Extra point constructor
-	/// </summary>
 	/// <param name="Value"></param>
 	/// <param name="Score"></param>
 	///	<param name="Color"></param>
-	ExtraPoint(int GivenValue, int* Score, Color Color);
+	/// <param name="Size"></param>
+	/// </summary>
+	ExtraPoint(int GivenValue, int* Score, Color Color, double Size);
 	/// <summary>
 /// Grants an extra point
 /// </summary>
@@ -90,13 +94,18 @@ private:
 /// </summary>
 class TimeSlow : public PowerUp
 {
+private:
+	double _slownessStrength = 1;
 public:
 	/// <summary>
 	/// Time slow power up contructor
-	/// </summary>
 	/// <param name="Time Scale"></param>
 	///	<param name="Color"></param>
-	TimeSlow(double* TimeScale, Color Color);
+	/// <param name="Size"></param>
+	/// <param name="Effect Time"></param>
+	/// <param name="Effect Strength"></param>
+	/// </summary>
+	TimeSlow(double* TimeScale, Color Color, double Size, double EffectTime, double EffectStrength);
 	/// <summary>
 	/// Slows time down
 	/// </summary>
@@ -124,11 +133,13 @@ class DoubleUp : public PowerUp
 public:
 	/// <summary>
 	/// Double up contructor
-	/// </summary>
 	/// <param name="Counter"></param>
 	/// <param name="List"></param>
 	/// <param name="Color"></param>
-	DoubleUp(int* Counter, Paddle* List, Color Color);
+	/// <param name="Size"></param>
+	/// <param name="Effect Time"></param>
+	/// </summary>
+	DoubleUp(int* Counter, Paddle* List, Color Color, double Size, double EffectTime);
 	/// <summary>
 	/// Adds the second paddle
 	/// </summary>

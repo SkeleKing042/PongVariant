@@ -25,11 +25,12 @@
 //----------------------------------//
 
 #define PADDLEPOSOFFSET				SCREENSIZE * 0.034
-#define PADDLESPEED					0.02
+#define PADDLESPEED					SCREENSIZE * 0.0000334
 #define PADDLEWIDTH					SCREENSIZE * 0.034
 #define PADDLEHEIGHT				SCREENSIZE * 0.167
 #define MOVEPADDLELEFT				KEY_LEFT
 #define MOVEPADDLERIGHT				KEY_RIGHT
+#define MAXIMUMPADDLECOUNT			20
 
 
 //----------------------------------//
@@ -38,11 +39,12 @@
 
 #define STARTINGOFFSETSCALAR		SCREENSIZE * 0.00034
 #define INITIALBALLSPEED			SCREENSIZE * 0.0033
-#define BALLSCORELIMIT				20
-#define BALLMAXSPEED				SCREENSIZE * 0.01
+#define BALLSCORELIMIT				10.0
+#define BALLMAXSPEED				SCREENSIZE * 0.006
 #define BALLSPEEDSCALAR				((BALLMAXSPEED - INITIALBALLSPEED)/BALLSCORELIMIT)
 #define BALLSIZE					SCREENSIZE * 0.0067
 #define BALLCOLISIONCHECKCOOLDOWN	5
+#define MAXIMUMBALLCOUNT			20
 
 
 //----------------------------------//
@@ -50,12 +52,11 @@
 //----------------------------------//
 
 // SCORE //
-#define SCORETEXTOFFSETX			0
+#define SCORETEXTOFFSETX			0.0
 #define SCORETEXTOFFSETY			(SCREENSIZE * 0.0833)
 #define SCORETEXTSIZE				(SCREENSIZE - (SCREENSIZE * 0.084))
 
 // GAME OVER //
-#define OUTLINESIZE					(SCREENSIZE * 0.0033)
 #define GOTEXTOFFSETX				SCREENSIZE * 0.0067
 #define GOTEXTSIZE					SCREENSIZE * 0.197
 #define GOTEXTOFFSETY				SCREENSIZE * 0.415
@@ -81,6 +82,7 @@
 #define BUTTONWIDTH					SCREENSIZE * 0.234
 #define BUTTONHEIGHT				SCREENSIZE * 0.117
 #define BUTTONSPACING				SCREENSIZE * 0.034
+#define BUTTONOUTLINESIZE			SCREENSIZE * 0.0033
 
 // START BUTTON //
 #define STARTBUTTONX				SCREENSIZE / 2.0 - BUTTONWIDTH - BUTTONSPACING
@@ -110,6 +112,9 @@
 #define TITLESIZE					SCREENSIZE * 0.7667
 #define TITLEMOVEMENTSCALE			SCREENSIZE * 0.0067
 
+// MISC //
+#define ANIMATIONSPEED				0.04
+
 //----------------------------------//
 //      GAME MODE MENU SETTINGS		//
 //----------------------------------//
@@ -119,13 +124,25 @@
 #define MODEMENUBUTTONHEIGHT		SCREENSIZE * 0.1
 #define MODEMENUBUTTONXOFFSET		MODEMENUBUTTONSPACING
 #define MODEMENUBUTTONYOFFSET		MODEMENUBUTTONSPACING + 0.0667 * SCREENSIZE
-#define MODEMENUEXTRAMODES			6
+#define MODEMENUEXTRAMODES			8
 #define MODEMENUBUTTONSPERROW		2
 #define MODEMENUNAMES				6
 
 //----------------------------------//
 //			   EXTRAS				//
 //----------------------------------//
+
+//--------------------//
+// GAME MODE SETTINGS //
+//--------------------//
+
+#define POWERUPSPAWNTIME			1.0
+#define POWERUPSIZE					50.0
+
+//POWERUP SETTING
+#define TIMESLOWTIME				8.0
+#define TIMESLOWAMOUNT				0.5
+#define DOUBLEUPTIME				10.0
 
 //---------//
 // COLOURS //

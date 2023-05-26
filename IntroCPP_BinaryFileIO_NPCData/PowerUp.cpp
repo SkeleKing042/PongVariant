@@ -1,6 +1,6 @@
 #include "PowerUp.h"
 #include <iostream>
-PowerUp::PowerUp(Color cl)
+PowerUp::PowerUp(Color cl, double si)
 {
 	//Generates a random int based off the screen size and use it to give the power up a random spawn
 	//point each time
@@ -14,10 +14,12 @@ PowerUp::PowerUp(Color cl)
 	_position.y = (float)SCREENSIZE / 2 + (float)offset;
 
 	_color = cl;
+	_size = si;
 }
-PowerUp::PowerUp(Color cl, Vector2 ps)
+PowerUp::PowerUp(Color cl, double si, Vector2 ps)
 {
 	_color = cl;
+	_size = si;
 	_position = ps;
 }
 PowerUp::~PowerUp()
@@ -36,7 +38,7 @@ void PowerUp::DoCountDown()
 		_counting = false;
 	}
 	else if (_counting)
-		_powerTimer += 0.0167;
+		_powerTimer += 1.0 / FPS;
 }
 void PowerUp::UndoEffect()
 {
@@ -45,7 +47,7 @@ void PowerUp::UndoEffect()
 void PowerUp::DrawObject()
 {
 	std::cout << "Child class missed when calling \'DrawObject\'" << std::endl;
-	DrawCircle(_position.x, _position.y, 10, WHITE);
+	DrawCircle(_position.x, _position.y, _size, WHITE);
 }
 void PowerUp::DrawVisuals()
 {

@@ -65,7 +65,11 @@ void Game::GameInitalisation(int mode)
     //Checking the selected gamemode
     switch (mode)
     {
+    case 0:
+        std::cout << "\'" << _modeNames[mode] << "\' game mode executed" << std::endl;
+        break;
     case 1:
+        std::cout << "\'" << _modeNames[mode] << "\' game mode executed" << std::endl;
         //Resizes the paddle and ball to half size
         _playerPaddle[0]._rec.width /= 2;
         _playerPaddle[0]._rec.height /= 2;
@@ -73,6 +77,7 @@ void Game::GameInitalisation(int mode)
         _playerPaddle[0].SetCorners();
         break;
     case 2:
+        std::cout << "\'" << _modeNames[mode] << "\' game mode executed" << std::endl;
         //Creates a ring of paddles
         //Due to a collision bug, it is possible to lose this mode
         for (int i = 1; i < 20; i++)
@@ -84,10 +89,12 @@ void Game::GameInitalisation(int mode)
         }
         break;
     case 3:
+        std::cout << "\'" << _modeNames[mode] << "\' game mode executed" << std::endl;
         //Enables random ball speeds
         _randomBallSpeed = true;
         break;
     case 4:
+        std::cout << "\'" << _modeNames[mode] << "\' game mode executed" << std::endl;
         //Creates another paddle opposite the player
         _playerPaddle[1].Init(_playerPaddle[0]._speed, _playerPaddle[0]._rec.width, _playerPaddle[0]._rec.height, _playerPaddle[0]._distanceFromCenter, random, PLAYERCOLOURA, PLAYERCOLOURB);
         //Offsets the paddle to be 180^ around the angle point and therefore, opposite the player
@@ -96,10 +103,15 @@ void Game::GameInitalisation(int mode)
         _activePaddleCount+=1;
         break;
     case 5:
+        std::cout << "\'" << _modeNames[mode] << "\' game mode executed" << std::endl;
         //Spawns power ups in game
         _spawnPowerUps = true;
-        _setPower = new PowerUp{ RAYWHITE };
-        _boosterPoint = new ExtraPoint{0, &_score, ORANGE };
+        _setPower = new PowerUp{ RAYWHITE, POWERUPSIZE };
+        _boosterPoint = new ExtraPoint{0, &_score, ORANGE, POWERUPSIZE };
+        break;
+    default:
+        std::cout << "Invalid game mode target given. Requested mode was \'" << mode << "\', however not such mode exists." << std::endl
+                  << "Check the switch statement at line 66 to see if the mode exists or check the call stack and find what called this function with this code" << std::endl;
         break;
     }
 
@@ -129,7 +141,7 @@ void Game::Update()
     }
 
     //Angle is used for "animation"
-    _angle += 0.04;
+    _angle += ANIMATIONSPEED;
     //Resets angle when reaching 0 or 360 degrees 
     if (_angle > PI * 2)
         _angle -= PI * 2;
@@ -376,15 +388,15 @@ void Game::GameUpdate()
                 switch (r)
                 {
                 case 0:
-                    _setPower = new ExtraPoint{2, &_score, ORANGE };
+                    _setPower = new ExtraPoint{2, &_score, ORANGE, POWERUPSIZE };
                     _setPower->_active = true;
                     break;
                 case 1:
-                    _setPower = new TimeSlow{ &_timeScale, SKYBLUE };
+                    _setPower = new TimeSlow{ &_timeScale, SKYBLUE, POWERUPSIZE, TIMESLOWTIME, TIMESLOWAMOUNT };
                     _setPower->_active = true;
                     break;
                 case 2:
-                    _setPower = new DoubleUp{ &_activePaddleCount, _paddlePtr, RED };
+                    _setPower = new DoubleUp{ &_activePaddleCount, _paddlePtr, RED, POWERUPSIZE, DOUBLEUPTIME };
                     _setPower->_active = true;
                 default:
                     break;
@@ -395,13 +407,13 @@ void Game::GameUpdate()
             //If there is an active power up, spawn an extra point power up
             else if (!_boosterPoint->_active && _setPower->_counting)
             {
-                _boosterPoint = new ExtraPoint{1, &_score, ORANGE };
+                _boosterPoint = new ExtraPoint{1, &_score, ORANGE, POWERUPSIZE };
                 _boosterPoint->_active = true;
             }
         }
         //Continue the spawn countdown
         else if (!_setPower->_active && _powerUpSpawnCountdown > 0)
-            _powerUpSpawnCountdown -= 0.0167;
+            _powerUpSpawnCountdown -= 1.0 / FPS;
 
         //Continue the effect countdown
         if (_setPower->_counting)

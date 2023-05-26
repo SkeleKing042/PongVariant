@@ -33,6 +33,6 @@ bool ClickableObject::Clicked(Vector2 pos)
 void ClickableObject::Draw()
 {
 	DrawRectangleRec(_rec, _baseColor);
-	DrawRectangleLinesEx(_rec, 2, _outLineColor);
-	DrawText(_name, _rec.x + _rec.width / 2 - (_nameLength + 1.0) / 2.0 * (MENUTEXTSIZE / 2), _rec.y + _rec.height / 2.0 - MENUTEXTSIZE / 2.0, MENUTEXTSIZE, _textColor);
+	DrawRectangleLinesEx(_rec, BUTTONOUTLINESIZE, _outLineColor);
+	DrawText(_name, _rec.x + _rec.width / 2 - (_nameLength + 1.0) / 2.0 * (MENUTEXTSIZE / 2.0), _rec.y + _rec.height / 2.0 - MENUTEXTSIZE / 2.0, MENUTEXTSIZE, _textColor);
 }

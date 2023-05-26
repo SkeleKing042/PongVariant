@@ -1,11 +1,11 @@
 #include "PowerUp.h"
 #include "Paddle.h"
 
-DoubleUp::DoubleUp(int* c, Paddle* pad, Color cl) : PowerUp(cl)
+DoubleUp::DoubleUp(int* c, Paddle* pad, Color cl, double si, double et) : PowerUp(cl, si)
 {
 	_paddleCount = c;
 	_paddlePoint = pad;
-	_powerTimeLimit = 10.0;
+	_powerTimeLimit = et;
 }
 
 void DoubleUp::DoEffect()
@@ -27,7 +27,7 @@ void DoubleUp::UndoEffect()
 
 void DoubleUp::DrawObject()
 {
-	DrawCircleV(_position, 50, _color);
+	DrawCircleV(_position, _size, _color);
 }
 
 void DoubleUp::DrawVisuals()
